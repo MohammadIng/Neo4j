@@ -150,6 +150,36 @@ public class Neo4jManager {
         }
     }
 
+    public boolean addPropertyToNode(long nodeId, Property newProperty) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Check if the node exists
+            Node node = this.getNodeById(nodeId);
+            if (node != null) {
+                // Execute a query to add the new property to the node
+                String query = "MATCH (n) WHERE id(n) = $nodeId SET n += $newProperties";
+                Value parameters = Values.parameters(
+                        "nodeId", nodeId,
+                        "newProperties", Values.parameters(newProperty.getName(), newProperty.getVal())
+                );
+
+                Result result = session.run(query, parameters);
+
+                // Check if the property was added
+                return result.consume().counters().propertiesSet() > 0;
+            } else {
+                // Node not found
+                System.out.println("Node with ID " + nodeId + " not found.");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
 
     public List<Node> getAllNodes() {
         List<Node> nodes = new ArrayList<>();

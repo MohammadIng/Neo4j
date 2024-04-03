@@ -23,7 +23,16 @@ public class Main {
 //        Node node = neo4jManager.getNodeById(3);
 //        neo4jManager.deleteNode(node);
 
-        neo4jManager.displayAllNodes();
+        neo4jManager.displayNodeById(1);
+        Property p = new Property("p12",12);
+        neo4jManager.addPropertyToNode(1, p);
+        neo4jManager.displayNodeById(1);
+
+        p = new Property("p12",122);
+        neo4jManager.addPropertyToNode(1, p);
+        neo4jManager.displayNodeById(1);
+
+
 
 
     }
