@@ -1,6 +1,7 @@
 package org.example;
 
 
+import org.neo4j.driver.types.Node;
 
 public class Main {
 
@@ -18,7 +19,12 @@ public class Main {
 //            new Property("y", 2)
 //        };
 //        neo4jManager.addNode("MyNode", properties);
-//        neo4jManager.displayAllNodes();
+
+//        Node node = neo4jManager.getNodeById(3);
+//        neo4jManager.deleteNode(node);
+
+        neo4jManager.displayAllNodes();
+
 
     }
 }

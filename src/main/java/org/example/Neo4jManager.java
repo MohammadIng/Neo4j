@@ -74,7 +74,7 @@ public class Neo4jManager {
         getDriver().close();
     }
 
-    public boolean addNode(String nodeName, Property[] properties) {
+    public boolean createNode(String nodeName, Property[] properties) {
         // Connection to the Neo4j database
         this.createDriver();
 
@@ -113,6 +113,44 @@ public class Neo4jManager {
         }
     }
 
+    public boolean deleteNode(Node node){
+        try {
+            return this.deleteNodeById(node.id());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    public boolean deleteNodeById(long nodeId) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Retrieve the node by its ID
+            Node node = this.getNodeById(nodeId);
+            if (node != null) {
+                // Execute a query to delete the node
+                String query = "MATCH (n) WHERE id(n) = $nodeId DELETE n";
+                Value parameters = Values.parameters("nodeId", nodeId);
+
+                Result result = session.run(query, parameters);
+
+                // Check if the node was deleted
+                return result.consume().counters().nodesDeleted() > 0;
+            } else {
+                // Node not found
+                System.out.println("Node with ID " + nodeId + " not found.");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+
     public List<Node> getAllNodes() {
         List<Node> nodes = new ArrayList<>();
         // Connection to the Neo4j database
@@ -137,7 +175,7 @@ public class Neo4jManager {
         // Convert list to array
         return nodes;
     }
-    public Node getNodeById(int nodeId) {
+    public Node getNodeById(long nodeId) {
         Node node = null;
         // Connection to the Neo4j database
         this.createDriver();
@@ -213,6 +251,8 @@ public class Neo4jManager {
         // Return the list of nodes
         return nodes;
     }
+
+
 
     public void displayAllNodes() {
         for (Node node: this.getAllNodes())
