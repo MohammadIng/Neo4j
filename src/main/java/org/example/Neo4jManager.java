@@ -3,6 +3,7 @@ package org.example;
 import org.neo4j.driver.*;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.types.Node;
+import org.neo4j.driver.types.Relationship;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -322,6 +323,93 @@ public class Neo4jManager {
         return nodes;
     }
 
+
+    public boolean addEdge(Edge edge) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Check if the start and end nodes exist
+
+            if (edge.getEndNode() != null && edge.getEndNode() != null) {
+                // Execute a query to create the relationship between the nodes
+                String query = "MATCH (start), (end) WHERE id(start) = $startNodeId AND id(end) = $endNodeId " +
+                        "CREATE (start)-[r:" + edge.getRelationshipType() + "]->(end)";
+                Value parameters = Values.parameters(
+                        "startNodeId", edge.getEndNode() .id(),
+                        "endNodeId", edge.getEndNode().id()
+                );
+
+                Result result = session.run(query, parameters);
+
+                // Check if the relationship was created
+                return result.consume().counters().relationshipsCreated() > 0;
+            } else {
+                // Nodes not found
+                System.out.println("Start or end node not found.");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+
+    public boolean addEdge2(Edge edge) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Check if the start and end nodes exist
+            if (edge.getStartNode() != null && edge.getEndNode() != null) {
+                // Execute a query to create the relationship between the nodes with properties
+                String query = "MATCH (start), (end) WHERE id(start) = $startNodeId AND id(end) = $endNodeId " +
+                        "CREATE (start)-[r:" + edge.getRelationshipType() + "]->(end) SET r += $properties";
+                Value parameters = Values.parameters(
+                        "startNodeId", edge.getStartNode().id(),
+                        "endNodeId", edge.getEndNode().id(),
+                        "properties", edge.getPropertiesMap()
+                );
+
+                Result result = session.run(query, parameters);
+
+                // Check if the relationship was created
+                return result.consume().counters().relationshipsCreated() > 0;
+            } else {
+                // Nodes not found
+                System.out.println("Start or end node not found.");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+
+
+    public void displayAllEdges() {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Execute a query to retrieve all relationships
+            String query = "MATCH ()-[r]->() RETURN r";
+            Result result = session.run(query);
+
+            // Process the result and display relationships
+            while (result.hasNext()) {
+                Record record = result.next();
+                Relationship relationship = record.get("r").asRelationship();
+                System.out.println("Relationship ID: " + relationship.id() + ", Type: " + relationship.type() +
+                        ", Start Node ID: " + relationship.startNodeId() + ", End Node ID: " + relationship.endNodeId() +
+                        ", Properties: " + relationship.asMap());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeDriver();
+        }
+    }
 
 
     public void displayAllNodes() {

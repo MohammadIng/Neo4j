@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f5feea1-288b-42c0-a422-cc2555313e9d" name="Changes" comment="delete Property From Node">
+    <list default="true" id="8f5feea1-288b-42c0-a422-cc2555313e9d" name="Changes" comment="class Edge">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Edge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Edge.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Neo4jManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Neo4jManager.java" afterDir="false" />
     </list>
@@ -116,7 +118,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1712142205758</updated>
-      <workItem from="1712142206850" duration="15477000" />
+      <workItem from="1712142206850" duration="16279000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -150,7 +152,23 @@
       <option name="project" value="LOCAL" />
       <updated>1712232338176</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="update Property in Node">
+      <option name="closed" value="true" />
+      <created>1712232671492</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1712232671492</updated>
+    </task>
+    <task id="LOCAL-00006" summary="class Edge">
+      <option name="closed" value="true" />
+      <created>1712232848785</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1712232848785</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -161,6 +179,8 @@
     <MESSAGE value="delete node" />
     <MESSAGE value="add Property To Node" />
     <MESSAGE value="delete Property From Node" />
-    <option name="LAST_COMMIT_MESSAGE" value="delete Property From Node" />
+    <MESSAGE value="update Property in Node" />
+    <MESSAGE value="class Edge" />
+    <option name="LAST_COMMIT_MESSAGE" value="class Edge" />
   </component>
 </project>
