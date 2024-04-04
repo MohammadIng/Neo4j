@@ -180,6 +180,36 @@ public class Neo4jManager {
         }
     }
 
+    public boolean deletePropertyFromNode(long nodeId, Property property) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Check if the node exists
+            Node node = this.getNodeById(nodeId);
+            if (node != null) {
+                // Execute a query to remove the property from the node
+                String query = "MATCH (n) WHERE id(n) = $nodeId REMOVE n." + property.getName();
+                Value parameters = Values.parameters(
+                        "nodeId", nodeId,
+                        "propertyName", property.getName()
+                );
+
+                session.run(query, parameters);
+
+                // Check if the property was deleted
+                return true;
+            } else {
+                // Node not found
+                System.out.println("Node with ID " + nodeId + " not found.");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
 
     public List<Node> getAllNodes() {
         List<Node> nodes = new ArrayList<>();
