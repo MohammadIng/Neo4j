@@ -44,7 +44,7 @@ public class Main {
             new Property("y", 2)
         };
         Edge edge = new Edge(neo4jManager.getNodeById(2), neo4jManager.getNodeById(5),"Test", properties);
-        neo4jManager.addEdge2(edge);
+        neo4jManager.addEdge(edge);
 
 //        neo4jManager.displayAllNodes();
         neo4jManager.displayAllEdges();
