@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f5feea1-288b-42c0-a422-cc2555313e9d" name="Changes" comment="add Property To Node">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="8f5feea1-288b-42c0-a422-cc2555313e9d" name="Changes" comment="delete Property From Node">
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Neo4jManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Neo4jManager.java" afterDir="false" />
     </list>
@@ -143,7 +142,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712159157776</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="delete Property From Node">
+      <option name="closed" value="true" />
+      <created>1712232338176</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1712232338176</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -153,6 +160,7 @@
     <MESSAGE value="init commit" />
     <MESSAGE value="delete node" />
     <MESSAGE value="add Property To Node" />
-    <option name="LAST_COMMIT_MESSAGE" value="add Property To Node" />
+    <MESSAGE value="delete Property From Node" />
+    <option name="LAST_COMMIT_MESSAGE" value="delete Property From Node" />
   </component>
 </project>

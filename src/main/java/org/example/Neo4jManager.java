@@ -150,6 +150,16 @@ public class Neo4jManager {
         }
     }
 
+    public boolean updatePropertyInNode(long nodeId, Property newProperty) {
+        try{
+            return this.addPropertyToNode(nodeId, newProperty);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean addPropertyToNode(long nodeId, Property newProperty) {
         this.createDriver();
         try (Session session = driver.session()) {

@@ -28,12 +28,19 @@ public class Main {
 //        neo4jManager.addPropertyToNode(1, p);
 //        neo4jManager.displayNodeById(1);
 
-//        Property p = new Property("p12",122);
-//        neo4jManager.addPropertyToNode(1, p);
-//        neo4jManager.displayNodeById(1);
-//        neo4jManager.deletePropertyFromNode(1, p);
-//        neo4jManager.displayNodeById(1);
-        neo4jManager.displayAllNodes();
+        Property p = new Property("p12",122);
+        neo4jManager.addPropertyToNode(1, p);
+        neo4jManager.displayNodeById(1);
+        p = new Property("p12",1224);
+        neo4jManager.updatePropertyInNode(1, p);
+        neo4jManager.displayNodeById(1);
+        neo4jManager.deletePropertyFromNode(1, p);
+        neo4jManager.displayNodeById(1);
+
+
+
+//        neo4jManager.displayAllNodes();
+
 
 
 
