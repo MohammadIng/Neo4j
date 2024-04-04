@@ -51,7 +51,8 @@ public class Main {
 //        neo4jManager.displayAllEdges();
 
 //        neo4jManager.displayEdge(neo4jManager.getEdgeById(2));
-        neo4jManager.displayEdgeById(0);
+
+        neo4jManager.displayEdges(neo4jManager.getEdgesByStartAndEndNodeId(2,5));
 
 
 

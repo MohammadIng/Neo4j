@@ -388,10 +388,8 @@ public class Neo4jManager {
             if (result.hasNext()) {
                 Record record = result.next();
                 Relationship relationship = record.get("r").asRelationship();
-                // Extract information about the edge and return an Edge object
-                // You should have a method to create an Edge object from the Relationship
 
-                return this.createEdgeFromRelationship(edgeId,relationship);
+                return this.createEdgeFromRelationship(relationship);
             } else {
                 // No edge found with the specified ID
                 System.out.println("No edge found with ID: " + edgeId);
@@ -405,16 +403,37 @@ public class Neo4jManager {
         }
     }
 
-    private Edge createEdgeFromRelationship(Long edgeId, Relationship relationship) {
+    public List <Edge> getEdgesByStartAndEndNodeId(int startNodeId, int endNodeId) {
+        this.createDriver();
+        List <Edge> edges = new ArrayList<>();
+        try (Session session = driver.session()) {
+            // Execute a query to retrieve the edge by start and end node IDs
+            String query = "MATCH (start)-[r]->(end) WHERE id(start) = $startNodeId AND id(end) = $endNodeId RETURN r";
+            Value parameters = Values.parameters("startNodeId", startNodeId, "endNodeId", endNodeId);
+
+            Result result = session.run(query, parameters);
+
+            // Check if any relationships were found
+            while (result.hasNext()) {
+                Record record = result.next();
+                Relationship relationship = record.get("r").asRelationship();
+                edges.add(createEdgeFromRelationship(relationship));
+            }
+            return edges;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    private Edge createEdgeFromRelationship(Relationship relationship) {
         return new Edge(relationship.id(), this.getNodeById(relationship.startNodeId()),
                 this.getNodeById(relationship.endNodeId()),
                 relationship.type(),
                 relationship.asMap());
     }
-
-
-
-
 
     public void displayAllEdges() {
         this.createDriver();
@@ -447,6 +466,11 @@ public class Neo4jManager {
         } else {
             System.out.println("Edge is null.");
         }
+    }
+
+    public void displayEdges(List<Edge>  edges) {
+        for (Edge edge: edges)
+            this.displayEdge(edge);
     }
 
 
