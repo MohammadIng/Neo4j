@@ -375,6 +375,44 @@ public class Neo4jManager {
         }
     }
 
+    public Edge getEdgeById(long edgeId) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Execute a query to retrieve the edge by its ID
+            String query = "MATCH ()-[r]->() WHERE id(r) = $edgeId RETURN r";
+            Value parameters = Values.parameters("edgeId", edgeId);
+
+            Result result = session.run(query, parameters);
+
+            // Check if any relationships were found
+            if (result.hasNext()) {
+                Record record = result.next();
+                Relationship relationship = record.get("r").asRelationship();
+                // Extract information about the edge and return an Edge object
+                // You should have a method to create an Edge object from the Relationship
+
+                return this.createEdgeFromRelationship(edgeId,relationship);
+            } else {
+                // No edge found with the specified ID
+                System.out.println("No edge found with ID: " + edgeId);
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    private Edge createEdgeFromRelationship(Long edgeId, Relationship relationship) {
+        return new Edge(relationship.id(), this.getNodeById(relationship.startNodeId()),
+                this.getNodeById(relationship.endNodeId()),
+                relationship.type(),
+                relationship.asMap());
+    }
+
+
 
 
 
@@ -399,6 +437,29 @@ public class Neo4jManager {
             this.closeDriver();
         }
     }
+
+    public void displayEdgeById(int edgeId) {
+        Edge edge = this.getEdgeById(edgeId);
+        if (edge != null) {
+            System.out.println("Edge ID: " + edge.getEdgeId() + ", Type: " + edge.getRelationshipType() +
+                    ", Start Node ID: " + edge.getStartNode().id() + ", End Node ID: " + edge.getEndNode().id() +
+                    ", Properties: " + edge.getPropertiesMap());
+        } else {
+            System.out.println("Edge is null.");
+        }
+    }
+
+
+    public void displayEdge(Edge edge) {
+        if (edge != null) {
+            System.out.println("Edge ID: " + edge.getEdgeId() + ", Type: " + edge.getRelationshipType() +
+                    ", Start Node ID: " + edge.getStartNode().id() + ", End Node ID: " + edge.getEndNode().id() +
+                    ", Properties: " + edge.getPropertiesMap());
+        } else {
+            System.out.println("Edge is null.");
+        }
+    }
+
 
 
     public void displayAllNodes() {

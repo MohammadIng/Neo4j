@@ -46,10 +46,12 @@ public class Main {
 //        Edge edge = new Edge(neo4jManager.getNodeById(2), neo4jManager.getNodeById(5),"Test", properties);
 //        neo4jManager.addEdge(edge);
 
-        neo4jManager.deleteEdgeById(1);
+//        neo4jManager.deleteEdgeById(1);
 //        neo4jManager.displayAllNodes();
-        neo4jManager.displayAllEdges();
+//        neo4jManager.displayAllEdges();
 
+//        neo4jManager.displayEdge(neo4jManager.getEdgeById(2));
+        neo4jManager.displayEdgeById(0);
 
 
 

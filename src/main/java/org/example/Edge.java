@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Edge {
+
+    private Long edgeId;
     private Node startNode;
     private Node endNode;
     private String relationshipType;
@@ -22,12 +24,24 @@ public class Edge {
         this.relationshipType = relationshipType;
     }
 
+    public Edge(Long edgeId, Node startNode, Node endNode, String relationshipType, Map<String, Object> propertiesMap) {
+        this.edgeId = edgeId;
+        this.startNode = startNode;
+        this.endNode = endNode;
+        this.relationshipType = relationshipType;
+        this.propertiesMap = propertiesMap;
+    }
+
     public Edge(Node startNode, Node endNode, String relationshipType, Property[] properties) {
         this.startNode = startNode;
         this.endNode = endNode;
         this.relationshipType = relationshipType;
         this.properties = properties;
         this.updatePropertiesMap();
+    }
+
+    public Long getEdgeId() {
+        return edgeId;
     }
 
     public Node getStartNode() {
@@ -48,6 +62,10 @@ public class Edge {
 
     public Map<String, Object> getPropertiesMap() {
         return propertiesMap;
+    }
+
+    public void setEdgeId(Long edgeId) {
+        this.edgeId = edgeId;
     }
 
     public void setStartNode(Node startNode) {
