@@ -39,13 +39,14 @@ public class Main {
 
 
 
-        Property[] properties = {
-            new Property("x", "1"),
-            new Property("y", 2)
-        };
-        Edge edge = new Edge(neo4jManager.getNodeById(2), neo4jManager.getNodeById(5),"Test", properties);
-        neo4jManager.addEdge(edge);
+//        Property[] properties = {
+//            new Property("x", "1"),
+//            new Property("y", 2)
+//        };
+//        Edge edge = new Edge(neo4jManager.getNodeById(2), neo4jManager.getNodeById(5),"Test", properties);
+//        neo4jManager.addEdge(edge);
 
+        neo4jManager.deleteEdgeById(1);
 //        neo4jManager.displayAllNodes();
         neo4jManager.displayAllEdges();
 

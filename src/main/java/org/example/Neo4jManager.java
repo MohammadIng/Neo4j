@@ -356,6 +356,27 @@ public class Neo4jManager {
     }
 
 
+    public boolean deleteEdgeById(long edgeId) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Execute a query to delete the edge by its ID
+            String query = "MATCH ()-[r]->() WHERE id(r) = $edgeId DELETE r";
+            Value parameters = Values.parameters("edgeId", edgeId);
+
+            Result result = session.run(query, parameters);
+
+            // Check if any relationships were deleted
+            return result.consume().counters().relationshipsDeleted() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+
+
 
     public void displayAllEdges() {
         this.createDriver();
