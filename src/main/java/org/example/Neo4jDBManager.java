@@ -73,6 +73,81 @@ public class Neo4jDBManager {
         getDriver().close();
     }
 
+    public boolean createNode(String nodeLabel, Property[] properties) {
+        // Connection to the Neo4j database
+        this.createDriver();
+
+        // preparing and add node
+        try (Session session = driver.session()) {
+            // Create a query to add a node
+            StringBuilder query = new StringBuilder("CREATE (p:" + nodeLabel + " {");
+            for (Property p : properties) {
+                query.append(p.getName()).append(": $").append(p.getName()).append(" ,");
+            }
+            query.deleteCharAt(query.length() - 1);
+            query.append("})");
+
+            // Create parameters to add a node
+            Map<String, Object> values = new HashMap<>();
+            for (Property p : properties) {
+                values.put(p.getName(), p.getVal());
+            }
+            Object[] params = new Object[values.size() * 2];
+            int i = 0;
+            for (Map.Entry<String, Object> entry : values.entrySet()) {
+                params[i++] = entry.getKey();
+                params[i++] = entry.getValue();
+            }
+            Value parameters = Values.parameters(params);
+
+            // add node
+            session.run(query.toString(), parameters);
+
+            System.out.println("Node added successfully.");
+            this.closeDriver();
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean deleteNode(Node node){
+        try {
+            return this.deleteNodeById(node.id());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteNodeById(long nodeId) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Retrieve the node by its ID
+            Node node = this.getNodeById(nodeId);
+            if (node != null) {
+                // Execute a query to delete the node
+                String query = "MATCH (n) WHERE id(n) = $nodeId DELETE n";
+                Value parameters = Values.parameters("nodeId", nodeId);
+
+                Result result = session.run(query, parameters);
+
+                // Check if the node was deleted
+                return result.consume().counters().nodesDeleted() > 0;
+            } else {
+                // Node not found
+                System.out.println("Node with ID " + nodeId + " not found.");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
     public List<Node> getAllNodes() {
         List<Node> nodes = new ArrayList<>();
         // Connection to the Neo4j database

@@ -63,8 +63,8 @@ public class Main {
 //        neo4jDBManager.createNode("MyNode", properties);
 //        neo4jDBManager.displayNodes(neo4jDBManager.getNodesByValue("1"));
 //        neo4jDBManager.displayNode(neo4jDBManager.getNodeById(1));
-
-
+//        neo4jDBManager.deleteNodeById(4);
+//        neo4jDBManager.displayAllNodes();
 
     }
 }
