@@ -1,6 +1,6 @@
 package org.example;
 
-
+// commit for the new class "Neo4jDBManager"
 public class Property {
     private String name;
     private Object val;

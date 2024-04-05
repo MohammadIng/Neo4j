@@ -56,7 +56,13 @@ public class Main {
 
         Neo4jDBManager neo4jDBManager = new Neo4jDBManager();
 
-        System.out.println(neo4jDBManager.getDriver());
+        Property[] properties = {
+            new Property("x", "1"),
+            new Property("y", 2)
+        };
+//        neo4jDBManager.createNode("MyNode", properties);
+//        neo4jDBManager.displayNodes(neo4jDBManager.getNodesByValue("1"));
+//        neo4jDBManager.displayNode(neo4jDBManager.getNodeById(1));
 
 
 
