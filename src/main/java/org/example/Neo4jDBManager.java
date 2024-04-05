@@ -148,6 +148,94 @@ public class Neo4jDBManager {
         }
     }
 
+    public boolean updatePropertyInNode(long nodeId, String propertyName, String newPropertyVal) {
+        try{
+            return this.updatePropertyInNode(nodeId, new Property(propertyName, newPropertyVal));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updatePropertyInNode(long nodeId, Property newProperty) {
+        try{
+            return this.addPropertyToNode(nodeId, newProperty);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addPropertyToNode(long nodeId, Property newProperty) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Check if the node exists
+            Node node = this.getNodeById(nodeId);
+            if (node != null) {
+                // Execute a query to add the new property to the node
+                String query = "MATCH (n) WHERE id(n) = $nodeId SET n += $newProperties";
+                Value parameters = Values.parameters(
+                        "nodeId", nodeId,
+                        "newProperties", Values.parameters(newProperty.getName(), newProperty.getVal())
+                );
+
+                Result result = session.run(query, parameters);
+
+                // Check if the property was added
+                return result.consume().counters().propertiesSet() > 0;
+            } else {
+                // Node not found
+                System.out.println("Node with ID " + nodeId + " not found.");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    public boolean deletePropertyFromNode(long nodeId, String propertyName) {
+        try {
+            return this.deletePropertyFromNode(nodeId,new Property(propertyName,null));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+}
+        public boolean deletePropertyFromNode(long nodeId, Property property) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Check if the node exists
+            Node node = this.getNodeById(nodeId);
+            if (node != null) {
+                // Execute a query to remove the property from the node
+                String query = "MATCH (n) WHERE id(n) = $nodeId REMOVE n." + property.getName();
+                Value parameters = Values.parameters(
+                        "nodeId", nodeId,
+                        "propertyName", property.getName()
+                );
+
+                session.run(query, parameters);
+
+                // Check if the property was deleted
+                return true;
+            } else {
+                // Node not found
+                System.out.println("Node with ID " + nodeId + " not found.");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
     public List<Node> getAllNodes() {
         List<Node> nodes = new ArrayList<>();
         // Connection to the Neo4j database
@@ -171,6 +259,7 @@ public class Neo4jDBManager {
         }
         return nodes;
     }
+
     public Node getNodeById(long nodeId) {
         Node node = null;
         // Connection to the Neo4j database
