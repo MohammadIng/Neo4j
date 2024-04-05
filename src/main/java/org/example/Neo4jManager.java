@@ -388,8 +388,7 @@ public class Neo4jManager {
             if (result.hasNext()) {
                 Record record = result.next();
                 Relationship relationship = record.get("r").asRelationship();
-
-                return this.createEdgeFromRelationship(relationship);
+                return new Edge(relationship, this.getNodeById(relationship.startNodeId()), this.getNodeById(relationship.startNodeId()));
             } else {
                 // No edge found with the specified ID
                 System.out.println("No edge found with ID: " + edgeId);
@@ -417,7 +416,11 @@ public class Neo4jManager {
             while (result.hasNext()) {
                 Record record = result.next();
                 Relationship relationship = record.get("r").asRelationship();
-                edges.add(createEdgeFromRelationship(relationship));
+                edges.add(new Edge(relationship,
+                                    this.getNodeById(relationship.startNodeId()),
+                                    this.getNodeById(relationship.startNodeId())
+                                )
+                        );
             }
             return edges;
         } catch (Exception e) {

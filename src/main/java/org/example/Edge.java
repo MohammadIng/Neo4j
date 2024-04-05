@@ -2,6 +2,7 @@ package org.example;
 
 
 import org.neo4j.driver.types.Node;
+import org.neo4j.driver.types.Relationship;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +39,14 @@ public class Edge {
         this.relationshipType = relationshipType;
         this.properties = properties;
         this.updatePropertiesMap();
+    }
+
+    public Edge(Relationship relationship, Node startNode, Node endNode) {
+        this.edgeId = relationship.id();
+        this.startNode = startNode;
+        this.endNode = endNode;
+        this.relationshipType = relationship.type();
+        this.propertiesMap = relationship.asMap();
     }
 
     public Long getEdgeId() {
