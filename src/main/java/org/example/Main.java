@@ -9,7 +9,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-        Neo4jManager neo4jManager = new Neo4jManager();
+//        Neo4jManager neo4jManager = new Neo4jManager();
 //        neo4jManager.displayAllNodes();
 //        neo4jManager.displayNodeById(4);
 //        neo4jManager.displayNodes(neo4jManager.getNodesByValue(30));
@@ -52,9 +52,11 @@ public class Main {
 
 //        neo4jManager.displayEdge(neo4jManager.getEdgeById(2));
 
-        neo4jManager.displayEdges(neo4jManager.getEdgesByStartAndEndNodeId(2,5));
+//        neo4jManager.displayEdges(neo4jManager.getEdgesByStartAndEndNodeId(2,5));
 
+        Neo4jDBManager neo4jDBManager = new Neo4jDBManager();
 
+        System.out.println(neo4jDBManager.getDriver());
 
 
 

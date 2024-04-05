@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f5feea1-288b-42c0-a422-cc2555313e9d" name="Changes" comment="get and display Edges by startNode and endNode">
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Edge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Edge.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Neo4jManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Neo4jManager.java" afterDir="false" />
+    <list default="true" id="8f5feea1-288b-42c0-a422-cc2555313e9d" name="Changes" comment="create Edge from Relationship constructor">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Neo4jDBManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -206,7 +206,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712236336877</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="create Edge from Relationship constructor">
+      <option name="closed" value="true" />
+      <created>1712312143911</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1712312143911</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -224,6 +232,7 @@
     <MESSAGE value="delete Edge between Nodes by id" />
     <MESSAGE value="get and display Edg by id" />
     <MESSAGE value="get and display Edges by startNode and endNode" />
-    <option name="LAST_COMMIT_MESSAGE" value="get and display Edges by startNode and endNode" />
+    <MESSAGE value="create Edge from Relationship constructor" />
+    <option name="LAST_COMMIT_MESSAGE" value="create Edge from Relationship constructor" />
   </component>
 </project>
