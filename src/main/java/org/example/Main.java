@@ -71,7 +71,13 @@ public class Main {
 
 //        neo4jDBManager.createRelationship(2,2, "R1",properties);
 //        neo4jDBManager.deleteRelationshipById(0);
-        neo4jDBManager.updatePropertyInRelationship(2, new Property("xxe","12w3ee"));
-        neo4jDBManager.displayAllRelationships();
+//        neo4jDBManager.updatePropertyInRelationship(2, new Property("xxe","12w3ee"));
+//        neo4jDBManager.displayAllRelationships();
+
+
+        neo4jDBManager.createNodeWithMultiLabels(new String[]{"l1","l2"}, properties);
+        neo4jDBManager.displayAllNodes();
+
+
     }
 }

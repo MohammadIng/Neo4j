@@ -73,9 +73,10 @@ public class Neo4jDBManager {
         getDriver().close();
     }
 
-    public boolean createNode(String nodeLabel, Property[] properties) {
+    public int createNode(String nodeLabel, Property[] properties) {
         // Connection to the Neo4j database
         this.createDriver();
+        int nodeId = -1;
 
         // preparing and add node
         try (Session session = driver.session()) {
@@ -85,7 +86,7 @@ public class Neo4jDBManager {
                 query.append(p.getName()).append(": $").append(p.getName()).append(" ,");
             }
             query.deleteCharAt(query.length() - 1);
-            query.append("})");
+            query.append("}) RETURN id(p) as nodeId");
 
             // Create parameters to add a node
             Map<String, Object> values = new HashMap<>();
@@ -101,15 +102,31 @@ public class Neo4jDBManager {
             Value parameters = Values.parameters(params);
 
             // add node
-            session.run(query.toString(), parameters);
-
+            Result result = session.run(query.toString(), parameters);
+            Record record = result.next();
+            System.out.println(result);
+            nodeId = (int)record.get("nodeId").asLong();
             System.out.println("Node added successfully.");
-            this.closeDriver();
-            return true;
+
         } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeDriver();
+        }
+        return nodeId;
+    }
+
+    public boolean createNodeWithMultiLabels(String []nodeLabels, Property[] properties) {
+        try {
+            int nodeId = this.createNode(nodeLabels[0], properties);
+            this.addLabelsToNode(nodeId, nodeLabels);
+            System.out.println(nodeId);
+            return true;
+        }catch (Exception e){
             return false;
         }
     }
+
 
     public boolean deleteNode(Node node) {
         try {
@@ -233,6 +250,89 @@ public class Neo4jDBManager {
             this.closeDriver();
         }
     }
+    public boolean addLabelsToNode(long nodeId, String []labels) {
+        try {
+            for(String label: labels)
+                this.addLabelToNode(nodeId, label);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean addLabelToNode(long nodeId, String label) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Execute a query to add a label to the node
+            String query = "MATCH (n) WHERE id(n) = $nodeId SET n:" + label;
+            Value parameters = Values.parameters("nodeId", nodeId);
+
+            Result result = session.run(query, parameters);
+
+            // Check if any nodes were updated
+            return result.consume().counters().labelsAdded() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    public boolean deleteLabelsFromNode(long nodeId, String []labels) {
+        try {
+            for(String label: labels)
+                this.deleteLabelFromNode(nodeId, label);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteLabelFromNode(long nodeId, String label) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Execute a query to remove the label from the node
+            String query = "MATCH (n) WHERE id(n) = $nodeId REMOVE n:" + label;
+            Value parameters = Values.parameters("nodeId", nodeId);
+
+            Result result = session.run(query, parameters);
+
+            // Check if any nodes were updated
+            return result.consume().counters().labelsRemoved() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    public List<String> getAllLabels() {
+        List<String> labels = new ArrayList<>();
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Execute a query to retrieve all distinct labels
+            String query = "CALL db.labels()";
+            Result result = session.run(query);
+
+            // Process the result and add labels to the list
+            while (result.hasNext()) {
+                Record record = result.next();
+                String label = record.get(0).asString();
+                labels.add(label);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeDriver();
+        }
+        return labels;
+    }
+
+
+
 
     public List<Node> getAllNodes() {
         List<Node> nodes = new ArrayList<>();
@@ -382,7 +482,7 @@ public class Neo4jDBManager {
 
     public void displayNode(Node node) {
         if (node != null) {
-            String label = node.labels().iterator().next();
+            Iterable<String> label = node.labels();
             System.out.println("ID: " + node.id() + ",  Name: " + label + ", Properties: " + node.asMap());
         } else {
             System.out.println("Node is null.");

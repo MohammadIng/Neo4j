@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f5feea1-288b-42c0-a422-cc2555313e9d" name="Changes" comment="Neo4jDBManager create and delete Relationship">
+    <list default="true" id="8f5feea1-288b-42c0-a422-cc2555313e9d" name="Changes" comment="Neo4jDBManager add and update property to relationship">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Neo4jDBManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Neo4jDBManager.java" afterDir="false" />
@@ -117,7 +117,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1712142205758</updated>
-      <workItem from="1712142206850" duration="27431000" />
+      <workItem from="1712142206850" duration="31584000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -271,7 +271,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712408399791</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Neo4jDBManager add and update property to relationship">
+      <option name="closed" value="true" />
+      <created>1712409557918</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1712409557918</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -308,6 +316,7 @@
     <MESSAGE value="Neo4jDBManager get and display Relationships" />
     <MESSAGE value="Neo4jDBManager get Node by label" />
     <MESSAGE value="Neo4jDBManager create and delete Relationship" />
-    <option name="LAST_COMMIT_MESSAGE" value="Neo4jDBManager create and delete Relationship" />
+    <MESSAGE value="Neo4jDBManager add and update property to relationship" />
+    <option name="LAST_COMMIT_MESSAGE" value="Neo4jDBManager add and update property to relationship" />
   </component>
 </project>
