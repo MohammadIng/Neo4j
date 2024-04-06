@@ -250,6 +250,7 @@ public class Neo4jDBManager {
             this.closeDriver();
         }
     }
+
     public boolean addLabelsToNode(long nodeId, String []labels) {
         try {
             for(String label: labels)
@@ -574,6 +575,60 @@ public class Neo4jDBManager {
             this.closeDriver();
         }
     }
+
+    public boolean addPropertyInRelationship(long relationshipId, String propertyName, String propertyVal) {
+        try {
+            return this.addPropertyInRelationship(relationshipId, new Property(propertyName, propertyVal));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    public boolean updatePropertyInRelationship(long relationshipId, String propertyName, String propertyVal) {
+        try {
+            return this.addPropertyInRelationship(relationshipId, new Property(propertyName, propertyVal));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    public boolean deletePropertyFromRelationship(long relationshipId, String propertyName) {
+        try {
+            return this.addPropertyInRelationship(relationshipId, new Property(propertyName, null));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    public boolean deletePropertyFromRelationship(long relationshipId, Property property) {
+        // Connection to the Neo4j database
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Execute a query to delete the property from the relationship
+            String query = "MATCH ()-[r]->() WHERE id(r) = $relationshipId REMOVE r." + property.getName();
+            Value parameters = Values.parameters("relationshipId", relationshipId);
+
+            Result result = session.run(query, parameters);
+
+            // Check if any relationships were modified
+            return result.consume().counters().relationshipsDeleted() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
 
 
     public List<Relationship> getAllRelationships() {

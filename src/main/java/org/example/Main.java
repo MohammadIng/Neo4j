@@ -75,8 +75,10 @@ public class Main {
 //        neo4jDBManager.displayAllRelationships();
 
 
-        neo4jDBManager.createNodeWithMultiLabels(new String[]{"l1","l2"}, properties);
-        neo4jDBManager.displayAllNodes();
+        neo4jDBManager.deletePropertyFromRelationship(2, "xxe");
+        neo4jDBManager.deletePropertyFromRelationship(2, new Property("x", 1));
+
+        neo4jDBManager.displayAllRelationships();
 
 
     }
