@@ -442,6 +442,40 @@ public class Neo4jDBManager {
         }
     }
 
+    public boolean updatePropertyInRelationship(long relationshipId, Property newProperty) {
+        try{
+           return this.addPropertyInRelationship(relationshipId, newProperty);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    public boolean addPropertyInRelationship(long relationshipId, Property newProperty) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Execute a query to update the property in the relationship
+            String query = "MATCH ()-[r]->() WHERE id(r) = $relationshipId SET r." + newProperty.getName() + " = $propertyValue";
+            Value parameters = Values.parameters(
+                    "relationshipId", relationshipId,
+                    "propertyValue", newProperty.getVal()
+            );
+
+            Result result = session.run(query, parameters);
+
+            // Check if any relationships were updated
+            return result.consume().counters().propertiesSet() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+
     public List<Relationship> getAllRelationships() {
         this.createDriver();
         List<Relationship> relationships = new ArrayList<>();
