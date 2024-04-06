@@ -138,6 +138,7 @@ public class Neo4jDBManager {
     }
 
     public boolean deleteNodeById(long nodeId) {
+        this.deleteRelationships(this.getRelationshipsByStartOrEndNodeId(nodeId,nodeId));
         this.createDriver();
         try (Session session = driver.session()) {
             // Retrieve the node by its ID
@@ -468,6 +469,7 @@ public class Neo4jDBManager {
     }
 
     public void displayAllNodes() {
+        System.out.println("All Nodes:");
         for (Node node: this.getAllNodes())
             this.displayNode(node);
     }
@@ -484,16 +486,15 @@ public class Neo4jDBManager {
     public void displayNode(Node node) {
         if (node != null) {
             Iterable<String> label = node.labels();
-            System.out.println("ID: " + node.id() + ",  Name: " + label + ", Properties: " + node.asMap());
+            System.out.println("Node ID: " + node.id() + ",  Label: " + label + ", Properties: " + node.asMap());
         } else {
             System.out.println("Node is null.");
         }
     }
-
-    public boolean createRelationship(int startNodeId, int endNodeId, String relationshipType, Property []properties) {
+    public boolean createRelationship(int startNodeId, int endNodeId, String relationshipType, Property[] properties) {
         this.createDriver();
-        Map<String, Object> propertiesMap  = new HashMap<>();
-        for (Property p: properties)
+        Map<String, Object> propertiesMap = new HashMap<>();
+        for (Property p : properties)
             propertiesMap.put(p.getName(), p.getVal());
         try (Session session = driver.session()) {
             Node startNode = this.getNodeById(startNodeId);
@@ -502,7 +503,7 @@ public class Neo4jDBManager {
             if (startNode != null && endNode != null) {
                 // Execute a query to create the relationship between the nodes with properties
                 String query = "MATCH (start), (end) WHERE id(start) = $startNodeId AND id(end) = $endNodeId " +
-                        "CREATE (start)-[r:" + relationshipType + "]->(end) SET r += $properties";
+                        "CREATE (start)-[r:`" + relationshipType + "`]->(end) SET r += $properties";
                 Value parameters = Values.parameters(
                         "startNodeId", startNodeId,
                         "endNodeId", endNodeId,
@@ -524,7 +525,18 @@ public class Neo4jDBManager {
         }
     }
 
-    public boolean deleteRelationshipById(long relationshipId) {
+
+    public boolean deleteRelationships(List<Relationship>  relationships) {
+        try {
+            for(Relationship relationship: relationships)
+                this.deleteRelationship(relationship);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+        public boolean deleteRelationshipById(long relationshipId) {
         try {
             return this.deleteRelationship(this.getRelationshipById(relationshipId));
         } catch (Exception e) {
@@ -664,7 +676,32 @@ public class Neo4jDBManager {
         }
     }
 
-    public List <Relationship> getRelationshipsByStartAndEndNodeId(int startNodeId, int endNodeId) {
+    public List <Relationship> getRelationshipsByStartOrEndNodeId(long startNodeId, long endNodeId) {
+        this.createDriver();
+        List <Relationship> relationships = new ArrayList<>();
+        try (Session session = driver.session()) {
+            // Execute a query to retrieve the edge by start and end node IDs
+            String query = "MATCH (start)-[r]->(end) WHERE id(start) = $startNodeId Or id(end) = $endNodeId RETURN r";
+            Value parameters = Values.parameters("startNodeId", startNodeId, "endNodeId", endNodeId);
+
+            Result result = session.run(query, parameters);
+
+            // Check if any relationships were found
+            while (result.hasNext()) {
+                Record record = result.next();
+                Relationship relationship = record.get("r").asRelationship();
+                relationships.add(relationship);
+            }
+            return relationships;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    public List <Relationship> getRelationshipsByStartAndEndNodeId(long startNodeId, long endNodeId) {
         this.createDriver();
         List <Relationship> relationships = new ArrayList<>();
         try (Session session = driver.session()) {
@@ -742,25 +779,9 @@ public class Neo4jDBManager {
 
 
     public void displayAllRelationships() {
-        this.createDriver();
-        try (Session session = driver.session()) {
-            // Execute a query to retrieve all relationships
-            String query = "MATCH ()-[r]->() RETURN r";
-            Result result = session.run(query);
-
-            // Process the result and display relationships
-            while (result.hasNext()) {
-                Record record = result.next();
-                Relationship relationship = record.get("r").asRelationship();
-                System.out.println("Relationship ID: " + relationship.id() + ", Type: " + relationship.type() +
-                        ", Start Node ID: " + relationship.startNodeId() + ", End Node ID: " + relationship.endNodeId() +
-                        ", Properties: " + relationship.asMap());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            this.closeDriver();
-        }
+        System.out.println("All Relationships:");
+        for (Relationship relationship: this.getAllRelationships())
+            this.displayRelationship(relationship);
     }
 
     public void displayRelationships(List<Relationship>  relationships) {
@@ -775,7 +796,7 @@ public class Neo4jDBManager {
 
     public void displayRelationship(Relationship relationship) {
         if (relationship != null) {
-            System.out.println("Edge ID: " + relationship.id() + ", Type: " + relationship.type() +
+            System.out.println("Relationship ID: " + relationship.id() + ", Type: " + relationship.type() +
                     ", Start Node ID: " + relationship.startNodeId() + ", End Node ID: " + relationship.endNodeId() +
                     ", Properties: " + relationship.asMap());
         } else {
