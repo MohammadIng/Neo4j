@@ -282,6 +282,30 @@ public class Neo4jDBManager {
         return node;
     }
 
+    public List<Node> getNodesByLabel(String label) {
+        List<Node> nodes = new ArrayList<>();
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Execute a query to retrieve nodes by label
+            String query = "MATCH (n:`" + label + "`) RETURN n";
+            Result result = session.run(query);
+
+            // Process the result and add nodes to the list
+            while (result.hasNext()) {
+                Record record = result.next();
+                Node node = record.get("n").asNode();
+                nodes.add(node);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeDriver();
+        }
+        // Return the list of nodes
+        return nodes;
+    }
+
+
     public List<Node> getNodesByProperty(Property property) {
         try {
             return this.getNodesByProperty(property.getName(), property.getVal());
