@@ -64,8 +64,9 @@ public class Main {
 //        neo4jDBManager.displayNodes(neo4jDBManager.getNodesByValue("1"));
 //        neo4jDBManager.displayNode(neo4jDBManager.getNodeById(1));
 //        neo4jDBManager.deleteNodeById(4);
-        neo4jDBManager.updatePropertyInNode(2, "xx", "qw");
-        neo4jDBManager.displayAllNodes();
+//        neo4jDBManager.updatePropertyInNode(2, "xx", "qw");
+//        neo4jDBManager.displayAllNodes();
+        neo4jDBManager.displayRelationships(neo4jDBManager.getRelationshipsByType("Test"));
 
     }
 }

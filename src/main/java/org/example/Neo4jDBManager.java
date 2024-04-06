@@ -3,6 +3,7 @@ package org.example;
 import org.neo4j.driver.*;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.types.Node;
+import org.neo4j.driver.types.Relationship;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +30,6 @@ public class Neo4jDBManager {
         this.password=password;
         this.createDriver();
     }
-
 
 
     public Driver getDriver() {
@@ -64,12 +64,12 @@ public class Neo4jDBManager {
         this.password = password;
     }
 
-    private void createDriver(){
+    private void createDriver() {
         driver = GraphDatabase.driver(this.getUrl(), AuthTokens.basic(this.getUsername(), this.getPassword()));
         driver.verifyConnectivity();
     }
 
-    public void closeDriver(){
+    public void closeDriver() {
         getDriver().close();
     }
 
@@ -106,13 +106,12 @@ public class Neo4jDBManager {
             System.out.println("Node added successfully.");
             this.closeDriver();
             return true;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean deleteNode(Node node){
+    public boolean deleteNode(Node node) {
         try {
             return this.deleteNodeById(node.id());
         } catch (Exception e) {
@@ -149,20 +148,18 @@ public class Neo4jDBManager {
     }
 
     public boolean updatePropertyInNode(long nodeId, String propertyName, String newPropertyVal) {
-        try{
+        try {
             return this.updatePropertyInNode(nodeId, new Property(propertyName, newPropertyVal));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
     public boolean updatePropertyInNode(long nodeId, Property newProperty) {
-        try{
+        try {
             return this.addPropertyToNode(nodeId, newProperty);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -200,13 +197,14 @@ public class Neo4jDBManager {
 
     public boolean deletePropertyFromNode(long nodeId, String propertyName) {
         try {
-            return this.deletePropertyFromNode(nodeId,new Property(propertyName,null));
+            return this.deletePropertyFromNode(nodeId, new Property(propertyName, null));
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-}
-        public boolean deletePropertyFromNode(long nodeId, Property property) {
+    }
+
+    public boolean deletePropertyFromNode(long nodeId, Property property) {
         this.createDriver();
         try (Session session = driver.session()) {
             // Check if the node exists
@@ -283,17 +281,17 @@ public class Neo4jDBManager {
         }
         return node;
     }
-    public  List<Node> getNodesByProperty(Property property) {
+
+    public List<Node> getNodesByProperty(Property property) {
         try {
             return this.getNodesByProperty(property.getName(), property.getVal());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public  List<Node> getNodesByProperty(String propertyName, Object propertyValue) {
+    public List<Node> getNodesByProperty(String propertyName, Object propertyValue) {
         List<Node> nodes = new ArrayList<>();
         // Connection to the Neo4j database
         this.createDriver();
@@ -318,7 +316,7 @@ public class Neo4jDBManager {
         return nodes;
     }
 
-    public List<Node> getNodesByValue(Object propertyValue) {
+    public List<Node> getNodesByPropertyValue(Object propertyValue) {
         List<Node> nodes = new ArrayList<>();
         // Connection to the Neo4j database
         createDriver();
@@ -366,5 +364,148 @@ public class Neo4jDBManager {
             System.out.println("Node is null.");
         }
     }
+
+    public List<Relationship> getAllRelationships() {
+        this.createDriver();
+        List<Relationship> relationships = new ArrayList<>();
+        try (Session session = driver.session()) {
+            // Execute a query to retrieve all relationships
+            String query = "MATCH ()-[r]->() RETURN r";
+            Result result = session.run(query);
+
+            // Process the result and display relationships
+            while (result.hasNext()) {
+                Record record = result.next();
+                Relationship relationship = record.get("r").asRelationship();
+                relationships.add(relationship);
+            }
+            return relationships;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    public List <Relationship> getRelationshipsByStartAndEndNodeId(int startNodeId, int endNodeId) {
+        this.createDriver();
+        List <Relationship> relationships = new ArrayList<>();
+        try (Session session = driver.session()) {
+            // Execute a query to retrieve the edge by start and end node IDs
+            String query = "MATCH (start)-[r]->(end) WHERE id(start) = $startNodeId AND id(end) = $endNodeId RETURN r";
+            Value parameters = Values.parameters("startNodeId", startNodeId, "endNodeId", endNodeId);
+
+            Result result = session.run(query, parameters);
+
+            // Check if any relationships were found
+            while (result.hasNext()) {
+                Record record = result.next();
+                Relationship relationship = record.get("r").asRelationship();
+                relationships.add(relationship);
+            }
+            return relationships;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    public Relationship getRelationshipById(long edgeId) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Execute a query to retrieve the edge by its ID
+            String query = "MATCH ()-[r]->() WHERE id(r) = $edgeId RETURN r";
+            Value parameters = Values.parameters("edgeId", edgeId);
+
+            Result result = session.run(query, parameters);
+
+            // Check if any relationships were found
+            if (result.hasNext()) {
+                Record record = result.next();
+                return record.get("r").asRelationship();
+            } else {
+                // No edge found with the specified ID
+                System.out.println("No edge found with ID: " + edgeId);
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    public List <Relationship> getRelationshipsByType(String type) {
+        this.createDriver();
+        List <Relationship> relationships = new ArrayList<>();
+        try (Session session = driver.session()) {
+            // Execute a query to retrieve relationships by type
+            String query = "MATCH ()-[r:`" + type + "`]->() RETURN r";
+            Result result = session.run(query);
+
+            // Check if any relationships were found
+            while (result.hasNext()) {
+                Record record = result.next();
+                Relationship relationship = record.get("r").asRelationship();
+                relationships.add(relationship);
+                return relationships;
+            }
+            return relationships;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+
+    public void displayAllRelationships() {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Execute a query to retrieve all relationships
+            String query = "MATCH ()-[r]->() RETURN r";
+            Result result = session.run(query);
+
+            // Process the result and display relationships
+            while (result.hasNext()) {
+                Record record = result.next();
+                Relationship relationship = record.get("r").asRelationship();
+                System.out.println("Relationship ID: " + relationship.id() + ", Type: " + relationship.type() +
+                        ", Start Node ID: " + relationship.startNodeId() + ", End Node ID: " + relationship.endNodeId() +
+                        ", Properties: " + relationship.asMap());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    public void displayRelationships(List<Relationship>  relationships) {
+        for (Relationship relationship: relationships)
+            this.displayRelationship(relationship);
+    }
+
+    public void displayRelationshipById(int edgeId) {
+        Relationship relationship = this.getRelationshipById(edgeId);
+        this.displayRelationship(relationship);
+    }
+
+    public void displayRelationship(Relationship relationship) {
+        if (relationship != null) {
+            System.out.println("Edge ID: " + relationship.id() + ", Type: " + relationship.type() +
+                    ", Start Node ID: " + relationship.startNodeId() + ", End Node ID: " + relationship.endNodeId() +
+                    ", Properties: " + relationship.asMap());
+        } else {
+            System.out.println("Edge is null.");
+        }
+    }
+
 
 }
