@@ -389,6 +389,59 @@ public class Neo4jDBManager {
         }
     }
 
+    public boolean createRelationship(int startNodeId, int endNodeId, String relationshipType, Property []properties) {
+        this.createDriver();
+        Map<String, Object> propertiesMap  = new HashMap<>();
+        for (Property p: properties)
+            propertiesMap.put(p.getName(), p.getVal());
+        try (Session session = driver.session()) {
+            Node startNode = this.getNodeById(startNodeId);
+            Node endNode = this.getNodeById(endNodeId);
+            // Check if the start and end nodes exist
+            if (startNode != null && endNode != null) {
+                // Execute a query to create the relationship between the nodes with properties
+                String query = "MATCH (start), (end) WHERE id(start) = $startNodeId AND id(end) = $endNodeId " +
+                        "CREATE (start)-[r:" + relationshipType + "]->(end) SET r += $properties";
+                Value parameters = Values.parameters(
+                        "startNodeId", startNodeId,
+                        "endNodeId", endNodeId,
+                        "properties", propertiesMap
+                );
+                Result result = session.run(query, parameters);
+                // Check if the relationship was created
+                return result.consume().counters().relationshipsCreated() > 0;
+            } else {
+                // Nodes not found
+                System.out.println("Start or end node not found.");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+    public boolean deleteRelationshipById(long relationshipId) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Execute a query to delete the edge by its ID
+            String query = "MATCH ()-[r]->() WHERE id(r) = $relationshipId DELETE r";
+            Value parameters = Values.parameters("relationshipId", relationshipId);
+
+            Result result = session.run(query, parameters);
+
+            // Check if any relationships were deleted
+            return result.consume().counters().relationshipsDeleted() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
     public List<Relationship> getAllRelationships() {
         this.createDriver();
         List<Relationship> relationships = new ArrayList<>();

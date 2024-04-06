@@ -69,5 +69,8 @@ public class Main {
 //        neo4jDBManager.displayAllNodes();
 //        neo4jDBManager.displayNodes(neo4jDBManager.getNodesByLabel("Person"));
 
+//        neo4jDBManager.createRelationship(2,2, "R1",properties);
+        neo4jDBManager.deleteRelationshipById(0);
+        neo4jDBManager.displayAllRelationships();
     }
 }
