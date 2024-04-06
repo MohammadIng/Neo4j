@@ -76,7 +76,7 @@ public class Main {
 
 
         neo4jDBManager.deletePropertyFromRelationship(2, "xxe");
-        neo4jDBManager.deletePropertyFromRelationship(2, new Property("x", 1));
+        neo4jDBManager.deleteRelationshipById(4);
 
         neo4jDBManager.displayAllRelationships();
 

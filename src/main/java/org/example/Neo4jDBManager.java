@@ -525,11 +525,21 @@ public class Neo4jDBManager {
     }
 
     public boolean deleteRelationshipById(long relationshipId) {
+        try {
+            return this.deleteRelationship(this.getRelationshipById(relationshipId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+        public boolean deleteRelationship(Relationship relationship) {
         this.createDriver();
         try (Session session = driver.session()) {
             // Execute a query to delete the edge by its ID
             String query = "MATCH ()-[r]->() WHERE id(r) = $relationshipId DELETE r";
-            Value parameters = Values.parameters("relationshipId", relationshipId);
+            Value parameters = Values.parameters("relationshipId", relationship.id());
 
             Result result = session.run(query, parameters);
 
