@@ -73,7 +73,7 @@ public class Neo4jDBManager {
         getDriver().close();
     }
 
-    public int createNode(String nodeLabel, Property[] properties) {
+    public int insertNode(String nodeLabel, Property[] properties) {
         // Connection to the Neo4j database
         this.createDriver();
         int nodeId = -1;
@@ -116,10 +116,10 @@ public class Neo4jDBManager {
         return nodeId;
     }
 
-    public boolean createNodeWithMultiLabels(String []nodeLabels, Property[] properties) {
+    public boolean insertNodeWithMultiLabels(String []nodeLabels, Property[] properties) {
         try {
-            int nodeId = this.createNode(nodeLabels[0], properties);
-            this.addLabelsToNode(nodeId, nodeLabels);
+            int nodeId = this.insertNode(nodeLabels[0], properties);
+            this.insertLabelsToNode(nodeId, nodeLabels);
             System.out.println(nodeId);
             return true;
         }catch (Exception e){
@@ -176,14 +176,14 @@ public class Neo4jDBManager {
 
     public boolean updatePropertyInNode(long nodeId, Property newProperty) {
         try {
-            return this.addPropertyToNode(nodeId, newProperty);
+            return this.insertPropertyToNode(nodeId, newProperty);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    public boolean addPropertyToNode(long nodeId, Property newProperty) {
+    public boolean insertPropertyToNode(long nodeId, Property newProperty) {
         this.createDriver();
         try (Session session = driver.session()) {
             // Check if the node exists
@@ -252,17 +252,17 @@ public class Neo4jDBManager {
         }
     }
 
-    public boolean addLabelsToNode(long nodeId, String []labels) {
+    public boolean insertLabelsToNode(long nodeId, String []labels) {
         try {
             for(String label: labels)
-                this.addLabelToNode(nodeId, label);
+                this.insertLabelToNode(nodeId, label);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
-    public boolean addLabelToNode(long nodeId, String label) {
+    public boolean insertLabelToNode(long nodeId, String label) {
         this.createDriver();
         try (Session session = driver.session()) {
             // Execute a query to add a label to the node
@@ -491,7 +491,7 @@ public class Neo4jDBManager {
             System.out.println("Node is null.");
         }
     }
-    public boolean createRelationship(int startNodeId, int endNodeId, String relationshipType, Property[] properties) {
+    public boolean insertRelationship(int startNodeId, int endNodeId, String relationshipType, Property[] properties) {
         this.createDriver();
         Map<String, Object> propertiesMap = new HashMap<>();
         for (Property p : properties)
@@ -567,7 +567,7 @@ public class Neo4jDBManager {
 
     public boolean updatePropertyInRelationship(long relationshipId, Property newProperty) {
         try{
-           return this.addPropertyInRelationship(relationshipId, newProperty);
+           return this.insertPropertyInRelationship(relationshipId, newProperty);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -576,7 +576,7 @@ public class Neo4jDBManager {
         }
     }
 
-    public boolean addPropertyInRelationship(long relationshipId, Property newProperty) {
+    public boolean insertPropertyInRelationship(long relationshipId, Property newProperty) {
         this.createDriver();
         try (Session session = driver.session()) {
             // Execute a query to update the property in the relationship
@@ -598,9 +598,9 @@ public class Neo4jDBManager {
         }
     }
 
-    public boolean addPropertyInRelationship(long relationshipId, String propertyName, String propertyVal) {
+    public boolean insertPropertyInRelationship(long relationshipId, String propertyName, String propertyVal) {
         try {
-            return this.addPropertyInRelationship(relationshipId, new Property(propertyName, propertyVal));
+            return this.insertPropertyInRelationship(relationshipId, new Property(propertyName, propertyVal));
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -611,7 +611,7 @@ public class Neo4jDBManager {
 
     public boolean updatePropertyInRelationship(long relationshipId, String propertyName, String propertyVal) {
         try {
-            return this.addPropertyInRelationship(relationshipId, new Property(propertyName, propertyVal));
+            return this.insertPropertyInRelationship(relationshipId, new Property(propertyName, propertyVal));
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -622,7 +622,7 @@ public class Neo4jDBManager {
 
     public boolean deletePropertyFromRelationship(long relationshipId, String propertyName) {
         try {
-            return this.addPropertyInRelationship(relationshipId, new Property(propertyName, null));
+            return this.insertPropertyInRelationship(relationshipId, new Property(propertyName, null));
         } catch (Exception e) {
             e.printStackTrace();
             return false;
