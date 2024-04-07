@@ -78,10 +78,15 @@ public class Main {
 //        neo4jDBManager.displayAllNodes();
 //        neo4jDBManager.displayAllRelationships();
 
+//        neo4jDBManager.displayAllNodes();
+////        neo4jDBManager.createRelationship(4,3,"1", properties);
+//        neo4jDBManager.deleteNodeById(0);
+//        neo4jDBManager.displayAllRelationships();
         neo4jDBManager.displayAllNodes();
-//        neo4jDBManager.createRelationship(4,3,"1", properties);
-        neo4jDBManager.deleteNodeById(0);
         neo4jDBManager.displayAllRelationships();
+        System.out.println(neo4jDBManager.getValOfPropertyInNode(1, "x"));
+        System.out.println(neo4jDBManager.getValOfPropertyInRelationship(2, "y"));
+
 
 
     }

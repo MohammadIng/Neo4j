@@ -804,5 +804,43 @@ public class Neo4jDBManager {
         }
     }
 
+    public Object getValOfPropertyInNode(long nodeId, String propertyName) {
+        String query = "MATCH (n) WHERE id(n) = $nodeId RETURN n." + propertyName + " AS propertyValue";
+        Value parameters = Values.parameters("nodeId", nodeId);
+        return this.getValOfProperty(nodeId, query, parameters);
+    }
+
+    public Object getValOfPropertyInRelationship(long relationshipId, String propertyName) {
+        String query = "MATCH ()-[r]->() WHERE id(r) = $relationshipId RETURN r." + propertyName + " AS propertyValue";
+        Value parameters = Values.parameters("relationshipId", relationshipId);
+        return this.getValOfProperty(relationshipId, query, parameters);
+    }
+
+    public Object getValOfProperty(long xId, String query, Value parameters) {
+        // Connection to the Neo4j database
+        this.createDriver();
+        try (Session session = driver.session()) {
+            // Execute a query to retrieve the value of a property in a node
+            Result result = session.run(query, parameters);
+
+            // Check if any results were returned
+            if (result.hasNext()) {
+                Record record = result.next();
+                // Get the value of the property
+                return record.get("propertyValue").asObject();
+            } else {
+                // No results found
+                System.out.println("Node with ID " + xId + " not found.");
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+
 
 }
