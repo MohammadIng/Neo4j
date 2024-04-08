@@ -57,8 +57,8 @@ public class Main {
         Neo4jDBManager neo4jDBManager = new Neo4jDBManager();
 
         Property[] properties = {
-            new Property("x", "1"),
-            new Property("y", 2)
+            new Property("x", 2),
+            new Property("x", 2)
         };
 //        neo4jDBManager.createNode("MyNode", properties);
 //        neo4jDBManager.displayNodes(neo4jDBManager.getNodesByValue("1"));
@@ -82,11 +82,14 @@ public class Main {
 ////        neo4jDBManager.createRelationship(4,3,"1", properties);
 //        neo4jDBManager.deleteNodeById(0);
 //        neo4jDBManager.displayAllRelationships();
-        neo4jDBManager.displayAllNodes();
-        neo4jDBManager.displayAllRelationships();
-        System.out.println(neo4jDBManager.getValOfPropertyInNode(1, "x"));
-        System.out.println(neo4jDBManager.getValOfPropertyInRelationship(2, "y"));
-
+//        for (int i=0; i<5; i++)
+//            neo4jDBManager.deleteNodeById(i);
+//        neo4jDBManager.insertNode("Nod1",properties);
+//        neo4jDBManager.displayAllConstraints();
+//        neo4jDBManager.displayAllNodes();
+//        neo4jDBManager.insertConstraintNodeUnique("Node1", "x");
+        neo4jDBManager.deleteConstraintById(4);
+        neo4jDBManager.displayAllConstraints();
 
 
     }

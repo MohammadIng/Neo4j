@@ -107,7 +107,6 @@ public class Neo4jDBManager {
             System.out.println(result);
             nodeId = (int)record.get("nodeId").asLong();
             System.out.println("Node added successfully.");
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -116,14 +115,13 @@ public class Neo4jDBManager {
         return nodeId;
     }
 
-    public boolean insertNodeWithMultiLabels(String []nodeLabels, Property[] properties) {
+    public int insertNodeWithMultiLabels(String []nodeLabels, Property[] properties) {
         try {
             int nodeId = this.insertNode(nodeLabels[0], properties);
             this.insertLabelsToNode(nodeId, nodeLabels);
-            System.out.println(nodeId);
-            return true;
+            return nodeId;
         }catch (Exception e){
-            return false;
+            return -1;
         }
     }
 
@@ -838,6 +836,117 @@ public class Neo4jDBManager {
             return null;
         } finally {
             this.closeDriver();
+        }
+    }
+
+    public List<Map<String, Object>> getAllConstraints() {
+        List<Map<String, Object>> constraints = new ArrayList<>();
+        this.createDriver();
+        try (Session session = driver.session()) {
+            String query = "SHOW CONSTRAINT";
+            Result result = session.run(query);
+            while (result.hasNext()) {
+                Record record = result.next();
+                constraints.add(record.asMap());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeDriver();
+        }
+        return constraints;
+    }
+
+    public Map<String, Object> getConstraintById(long constraintId) {
+        try {
+            return this.getConstraint(null, constraintId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public Map<String, Object> getConstraintByName(String constraintByName) {
+        try {
+            return this.getConstraint(constraintByName, -1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Map<String, Object> getConstraint(String constraintByName, long constraintId) {
+        try {
+            for (Map<String, Object> constraint : this.getAllConstraints()) {
+                if (constraintId!=-1 && constraint.containsKey("id") && constraint.get("id").equals(constraintId)) {
+                    return constraint;
+                }
+                else if ( constraintByName!=null && constraint.containsKey("name") && constraint.get("name").equals(constraintByName)){
+                    return constraint;
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void displayAllConstraints(){
+        System.out.println("All Constraints");
+        for(Map<String, Object> constraint: this.getAllConstraints())
+            System.out.println(constraint);
+    }
+
+    public void displayConstraintByName(String constraintName){
+        this.displayConstraint(this.getConstraintByName(constraintName));
+    }
+    public void displayConstraintById(Long constraintId){
+        this.displayConstraint(this.getConstraintById(constraintId));
+    }
+    public void displayConstraint(Map<String, Object> constraint){
+        System.out.println(constraint);
+    }
+
+    public boolean deleteAllConstraints() {
+        try {
+            for (Map<String, Object> constraint: this.getAllConstraints())
+                this.deleteConstraintByName(constraint.get("name").toString());
+            return true;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteConstraintByName(String constraint) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            String query = "DROP CONSTRAINT " + constraint;
+            Result result = session.run(query);
+            return result.consume().counters().constraintsRemoved() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        finally {
+            closeDriver();
+        }
+    }
+
+    public boolean deleteConstraintById(int constraintId) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            String constraint = this.getConstraintById(constraintId).get("name").toString();
+            String query = "DROP CONSTRAINT " + constraint;
+            Result result = session.run(query);
+            return result.consume().counters().constraintsRemoved() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        finally {
+            closeDriver();
         }
     }
 
