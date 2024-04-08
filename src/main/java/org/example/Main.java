@@ -56,10 +56,6 @@ public class Main {
 
         Neo4jDBManager neo4jDBManager = new Neo4jDBManager();
 
-        Property[] properties = {
-            new Property("x", 2),
-            new Property("x", 2)
-        };
 //        neo4jDBManager.createNode("MyNode", properties);
 //        neo4jDBManager.displayNodes(neo4jDBManager.getNodesByValue("1"));
 //        neo4jDBManager.displayNode(neo4jDBManager.getNodeById(1));
@@ -82,14 +78,26 @@ public class Main {
 ////        neo4jDBManager.createRelationship(4,3,"1", properties);
 //        neo4jDBManager.deleteNodeById(0);
 //        neo4jDBManager.displayAllRelationships();
-//        for (int i=0; i<5; i++)
+//        for (int i=0; i<20; i++)
 //            neo4jDBManager.deleteNodeById(i);
-//        neo4jDBManager.insertNode("Nod1",properties);
+//        String[] labels = new String[]{"L1","L2"};
+//        neo4jDBManager.insertNodeWithMultiLabels(labels,properties);
+//        neo4jDBManager.insertLabelsToNode(10, labels);
 //        neo4jDBManager.displayAllConstraints();
-//        neo4jDBManager.displayAllNodes();
+        Property[] properties = {
+//                new Property("name", "Judy"),
+//                new Property("age", 23),
+
+        };
+//        neo4jDBManager.insertConstraintNodeUnique("Person","name");
+//        neo4jDBManager.insertNode("Person", properties);
+        neo4jDBManager.insertRelationship(6,4,"kennt", properties );
+//        neo4jDBManager.deletePropertyFromNode(4, "age");
+        neo4jDBManager.displayAllNodes();
+        neo4jDBManager.displayAllRelationships();
 //        neo4jDBManager.insertConstraintNodeUnique("Node1", "x");
-        neo4jDBManager.deleteConstraintById(4);
-        neo4jDBManager.displayAllConstraints();
+//        neo4jDBManager.deleteConstraintById(4);
+//        neo4jDBManager.displayAllConstraints();
 
 
     }

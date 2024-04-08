@@ -907,6 +907,32 @@ public class Neo4jDBManager {
         System.out.println(constraint);
     }
 
+    public boolean insertConstraintNodeUnique(String label, Property property) {
+        try  {
+            return this.insertConstraintNodeUnique(label, property.getName());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean insertConstraintNodeUnique(String label, String propertyName) {
+        this.createDriver();
+        try (Session session = driver.session()) {
+            String query = "CREATE CONSTRAINT FOR (n:" + label + ") REQUIRE n." + propertyName + " IS UNIQUE";
+            Result result = session.run(query);
+            return result.consume().counters().constraintsAdded() > 0;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        finally {
+            this.closeDriver();
+        }
+    }
+
     public boolean deleteAllConstraints() {
         try {
             for (Map<String, Object> constraint: this.getAllConstraints())
@@ -917,6 +943,7 @@ public class Neo4jDBManager {
             e.printStackTrace();
             return false;
         }
+
     }
 
     public boolean deleteConstraintByName(String constraint) {
@@ -949,7 +976,5 @@ public class Neo4jDBManager {
             closeDriver();
         }
     }
-
-
 
 }

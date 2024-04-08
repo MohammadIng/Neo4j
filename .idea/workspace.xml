@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f5feea1-288b-42c0-a422-cc2555313e9d" name="Changes" comment="Neo4jDBManager code review">
+    <list default="true" id="8f5feea1-288b-42c0-a422-cc2555313e9d" name="Changes" comment="Neo4jDBManager get display and delete constraints">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Neo4jDBManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Neo4jDBManager.java" afterDir="false" />
     </list>
@@ -118,7 +117,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1712142205758</updated>
-      <workItem from="1712142206850" duration="41593000" />
+      <workItem from="1712142206850" duration="46770000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -328,7 +327,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712486135532</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Neo4jDBManager get display and delete constraints">
+      <option name="closed" value="true" />
+      <created>1712579109559</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1712579109559</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -346,7 +353,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="delete node" />
     <MESSAGE value="add Property To Node" />
     <MESSAGE value="delete Property From Node" />
     <MESSAGE value="update Property in Node" />
@@ -371,6 +377,7 @@
     <MESSAGE value="Neo4jDBManager delete all related Relationships by deleting Node" />
     <MESSAGE value="Neo4jDBManager get value of property in node and relationship" />
     <MESSAGE value="Neo4jDBManager code review" />
-    <option name="LAST_COMMIT_MESSAGE" value="Neo4jDBManager code review" />
+    <MESSAGE value="Neo4jDBManager get display and delete constraints" />
+    <option name="LAST_COMMIT_MESSAGE" value="Neo4jDBManager get display and delete constraints" />
   </component>
 </project>
