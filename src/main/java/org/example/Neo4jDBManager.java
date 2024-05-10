@@ -17,17 +17,17 @@ public class Neo4jDBManager {
     private String username;
     private String password;
 
-    public Neo4jDBManager(){
-        this.url="bolt://localhost:7687";
-        this.username="neo4j";
-        this.password="test1234";
+    public Neo4jDBManager() {
+        this.url = "bolt://localhost:7687";
+        this.username = "neo4j";
+        this.password = "test1234";
         this.createDriver();
     }
 
-    public Neo4jDBManager(String url, String username, String password){
-        this.url=url;
-        this.username=username;
-        this.password=password;
+    public Neo4jDBManager(String url, String username, String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
         this.createDriver();
     }
 
@@ -105,7 +105,7 @@ public class Neo4jDBManager {
             Result result = session.run(query.toString(), parameters);
             Record record = result.next();
             System.out.println(result);
-            nodeId = (int)record.get("nodeId").asLong();
+            nodeId = (int) record.get("nodeId").asLong();
             System.out.println("Node added successfully.");
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,12 +115,12 @@ public class Neo4jDBManager {
         return nodeId;
     }
 
-    public int insertNodeWithMultiLabels(String []nodeLabels, Property[] properties) {
+    public int insertNodeWithMultiLabels(String[] nodeLabels, Property[] properties) {
         try {
             int nodeId = this.insertNode(nodeLabels[0], properties);
             this.insertLabelsToNode(nodeId, nodeLabels);
             return nodeId;
-        }catch (Exception e){
+        } catch (Exception e) {
             return -1;
         }
     }
@@ -136,7 +136,7 @@ public class Neo4jDBManager {
     }
 
     public boolean deleteNodeById(long nodeId) {
-        this.deleteRelationships(this.getRelationshipsByStartOrEndNodeId(nodeId,nodeId));
+        this.deleteRelationships(this.getRelationshipsByStartOrEndNodeId(nodeId, nodeId));
         this.createDriver();
         try (Session session = driver.session()) {
             // Retrieve the node by its ID
@@ -250,9 +250,9 @@ public class Neo4jDBManager {
         }
     }
 
-    public boolean insertLabelsToNode(long nodeId, String []labels) {
+    public boolean insertLabelsToNode(long nodeId, String[] labels) {
         try {
-            for(String label: labels)
+            for (String label : labels)
                 this.insertLabelToNode(nodeId, label);
             return true;
         } catch (Exception e) {
@@ -260,6 +260,7 @@ public class Neo4jDBManager {
             return false;
         }
     }
+
     public boolean insertLabelToNode(long nodeId, String label) {
         this.createDriver();
         try (Session session = driver.session()) {
@@ -279,9 +280,9 @@ public class Neo4jDBManager {
         }
     }
 
-    public boolean deleteLabelsFromNode(long nodeId, String []labels) {
+    public boolean deleteLabelsFromNode(long nodeId, String[] labels) {
         try {
-            for(String label: labels)
+            for (String label : labels)
                 this.deleteLabelFromNode(nodeId, label);
             return true;
         } catch (Exception e) {
@@ -330,8 +331,6 @@ public class Neo4jDBManager {
         }
         return labels;
     }
-
-
 
 
     public List<Node> getAllNodes() {
@@ -468,12 +467,12 @@ public class Neo4jDBManager {
 
     public void displayAllNodes() {
         System.out.println("All Nodes:");
-        for (Node node: this.getAllNodes())
+        for (Node node : this.getAllNodes())
             this.displayNode(node);
     }
 
     public void displayNodes(List<Node> nodes) {
-        for (Node node: nodes)
+        for (Node node : nodes)
             this.displayNode(node);
     }
 
@@ -489,6 +488,7 @@ public class Neo4jDBManager {
             System.out.println("Node is null.");
         }
     }
+
     public boolean insertRelationship(int startNodeId, int endNodeId, String relationshipType, Property[] properties) {
         this.createDriver();
         Map<String, Object> propertiesMap = new HashMap<>();
@@ -524,17 +524,17 @@ public class Neo4jDBManager {
     }
 
 
-    public boolean deleteRelationships(List<Relationship>  relationships) {
+    public boolean deleteRelationships(List<Relationship> relationships) {
         try {
-            for(Relationship relationship: relationships)
+            for (Relationship relationship : relationships)
                 this.deleteRelationship(relationship);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-        public boolean deleteRelationshipById(long relationshipId) {
+    public boolean deleteRelationshipById(long relationshipId) {
         try {
             return this.deleteRelationship(this.getRelationshipById(relationshipId));
         } catch (Exception e) {
@@ -544,7 +544,8 @@ public class Neo4jDBManager {
             this.closeDriver();
         }
     }
-        public boolean deleteRelationship(Relationship relationship) {
+
+    public boolean deleteRelationship(Relationship relationship) {
         this.createDriver();
         try (Session session = driver.session()) {
             // Execute a query to delete the edge by its ID
@@ -564,8 +565,8 @@ public class Neo4jDBManager {
     }
 
     public boolean updatePropertyInRelationship(long relationshipId, Property newProperty) {
-        try{
-           return this.insertPropertyInRelationship(relationshipId, newProperty);
+        try {
+            return this.insertPropertyInRelationship(relationshipId, newProperty);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -650,7 +651,6 @@ public class Neo4jDBManager {
     }
 
 
-
     public List<Relationship> getAllRelationships() {
         this.createDriver();
         List<Relationship> relationships = new ArrayList<>();
@@ -674,9 +674,9 @@ public class Neo4jDBManager {
         }
     }
 
-    public List <Relationship> getRelationshipsByStartOrEndNodeId(long startNodeId, long endNodeId) {
+    public List<Relationship> getRelationshipsByStartOrEndNodeId(long startNodeId, long endNodeId) {
         this.createDriver();
-        List <Relationship> relationships = new ArrayList<>();
+        List<Relationship> relationships = new ArrayList<>();
         try (Session session = driver.session()) {
             // Execute a query to retrieve the edge by start and end node IDs
             String query = "MATCH (start)-[r]->(end) WHERE id(start) = $startNodeId Or id(end) = $endNodeId RETURN r";
@@ -699,9 +699,9 @@ public class Neo4jDBManager {
         }
     }
 
-    public List <Relationship> getRelationshipsByStartAndEndNodeId(long startNodeId, long endNodeId) {
+    public List<Relationship> getRelationshipsByStartAndEndNodeId(long startNodeId, long endNodeId) {
         this.createDriver();
-        List <Relationship> relationships = new ArrayList<>();
+        List<Relationship> relationships = new ArrayList<>();
         try (Session session = driver.session()) {
             // Execute a query to retrieve the edge by start and end node IDs
             String query = "MATCH (start)-[r]->(end) WHERE id(start) = $startNodeId AND id(end) = $endNodeId RETURN r";
@@ -750,9 +750,9 @@ public class Neo4jDBManager {
         }
     }
 
-    public List <Relationship> getRelationshipsByType(String type) {
+    public List<Relationship> getRelationshipsByType(String type) {
         this.createDriver();
-        List <Relationship> relationships = new ArrayList<>();
+        List<Relationship> relationships = new ArrayList<>();
         try (Session session = driver.session()) {
             // Execute a query to retrieve relationships by type
             String query = "MATCH ()-[r:`" + type + "`]->() RETURN r";
@@ -778,12 +778,12 @@ public class Neo4jDBManager {
 
     public void displayAllRelationships() {
         System.out.println("All Relationships:");
-        for (Relationship relationship: this.getAllRelationships())
+        for (Relationship relationship : this.getAllRelationships())
             this.displayRelationship(relationship);
     }
 
-    public void displayRelationships(List<Relationship>  relationships) {
-        for (Relationship relationship: relationships)
+    public void displayRelationships(List<Relationship> relationships) {
+        for (Relationship relationship : relationships)
             this.displayRelationship(relationship);
     }
 
@@ -865,6 +865,7 @@ public class Neo4jDBManager {
             return null;
         }
     }
+
     public Map<String, Object> getConstraintByName(String constraintByName) {
         try {
             return this.getConstraint(constraintByName, -1);
@@ -877,10 +878,9 @@ public class Neo4jDBManager {
     public Map<String, Object> getConstraint(String constraintByName, long constraintId) {
         try {
             for (Map<String, Object> constraint : this.getAllConstraints()) {
-                if (constraintId!=-1 && constraint.containsKey("id") && constraint.get("id").equals(constraintId)) {
+                if (constraintId != -1 && constraint.containsKey("id") && constraint.get("id").equals(constraintId)) {
                     return constraint;
-                }
-                else if ( constraintByName!=null && constraint.containsKey("name") && constraint.get("name").equals(constraintByName)){
+                } else if (constraintByName != null && constraint.containsKey("name") && constraint.get("name").equals(constraintByName)) {
                     return constraint;
                 }
             }
@@ -891,27 +891,28 @@ public class Neo4jDBManager {
         }
     }
 
-    public void displayAllConstraints(){
+    public void displayAllConstraints() {
         System.out.println("All Constraints");
-        for(Map<String, Object> constraint: this.getAllConstraints())
+        for (Map<String, Object> constraint : this.getAllConstraints())
             System.out.println(constraint);
     }
 
-    public void displayConstraintByName(String constraintName){
+    public void displayConstraintByName(String constraintName) {
         this.displayConstraint(this.getConstraintByName(constraintName));
     }
-    public void displayConstraintById(Long constraintId){
+
+    public void displayConstraintById(Long constraintId) {
         this.displayConstraint(this.getConstraintById(constraintId));
     }
-    public void displayConstraint(Map<String, Object> constraint){
+
+    public void displayConstraint(Map<String, Object> constraint) {
         System.out.println(constraint);
     }
 
     public boolean insertConstraintNodeUnique(String label, Property property) {
-        try  {
+        try {
             return this.insertConstraintNodeUnique(label, property.getName());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -923,23 +924,20 @@ public class Neo4jDBManager {
             String query = "CREATE CONSTRAINT FOR (n:" + label + ") REQUIRE n." + propertyName + " IS UNIQUE";
             Result result = session.run(query);
             return result.consume().counters().constraintsAdded() > 0;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
-        }
-        finally {
+        } finally {
             this.closeDriver();
         }
     }
 
     public boolean deleteAllConstraints() {
         try {
-            for (Map<String, Object> constraint: this.getAllConstraints())
+            for (Map<String, Object> constraint : this.getAllConstraints())
                 this.deleteConstraintByName(constraint.get("name").toString());
             return true;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -955,8 +953,7 @@ public class Neo4jDBManager {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-        }
-        finally {
+        } finally {
             closeDriver();
         }
     }
@@ -971,9 +968,37 @@ public class Neo4jDBManager {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-        }
-        finally {
+        } finally {
             closeDriver();
+        }
+    }
+
+    public boolean updateNodeLabel(Integer nodeId, String oldLabel, String newLabel) {
+        try {
+            this.deleteLabelFromNode(nodeId, oldLabel);
+            this.insertLabelToNode(nodeId, newLabel);
+            return true;
+        }
+        catch (Exception exception){
+            return false;
+        }
+
+    }
+
+    public boolean updateRelationshipType(Integer relationshipId,  String newType) {
+        try (Session session = driver.session()) {
+            Relationship relationship = this.getRelationshipById(relationshipId);
+            Property [] properties = new Property[relationship.asMap().size()];
+            Object[] types = relationship.asMap().keySet().toArray();
+            for (int i=0;i<relationship.asMap().size();i++){
+                properties[i]= new Property(types[0].toString(), relationship.asMap().get(types[i]));
+            }
+            this.insertRelationship((int) relationship.startNodeId(), (int) relationship.endNodeId(), newType, properties);
+            this.deleteRelationshipById(relationshipId);
+            return true;
+        }
+        catch (Exception exception){
+            return false;
         }
     }
 
