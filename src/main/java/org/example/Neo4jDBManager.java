@@ -5,10 +5,7 @@ import org.neo4j.driver.Record;
 import org.neo4j.driver.types.Node;
 import org.neo4j.driver.types.Relationship;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Neo4jDBManager {
 
@@ -488,7 +485,6 @@ public class Neo4jDBManager {
             System.out.println("Node is null.");
         }
     }
-
     public boolean insertRelationship(int startNodeId, int endNodeId, String relationshipType, Property[] properties) {
         this.createDriver();
         Map<String, Object> propertiesMap = new HashMap<>();
@@ -523,8 +519,38 @@ public class Neo4jDBManager {
         }
     }
 
+    public boolean insertRelationshipWithoutDuplicate(int startNodeId, int endNodeId, String relationshipType, Property[] properties) {
+        this.createDriver();
+        Map<String, Object> propertiesMap = new HashMap<>();
+        for (Property p : properties)
+            propertiesMap.put(p.getName(), p.getVal());
+        try  {
+            List<Relationship> relationships = this.getRelationshipsByStartAndEndNodeId(startNodeId, endNodeId);
+            boolean createRelationship = true;
+            for(Relationship relationship: relationships){
+                if(Objects.equals(relationship.type(), relationshipType)){
+                    createRelationship = false;
+                    for(Property p: properties) {
+                        this.insertPropertyInRelationship(relationship.id(), p);
+                    }
+                    break;
+                }
+            }
+            if (createRelationship){
+                this.insertRelationship(startNodeId,endNodeId,relationshipType, properties);
+            }
+            return true;
 
-    public boolean deleteRelationships(List<Relationship> relationships) {
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            this.closeDriver();
+        }
+    }
+
+
+        public boolean deleteRelationships(List<Relationship> relationships) {
         try {
             for (Relationship relationship : relationships)
                 this.deleteRelationship(relationship);
@@ -999,6 +1025,49 @@ public class Neo4jDBManager {
         }
         catch (Exception exception){
             return false;
+        }
+    }
+
+    public int insertNodeWithOutDuplicate(String label, Property []properties){
+        try {
+            Map<String, Object> propertiesAssMap = new HashMap<>();
+            for(Property p: properties) {
+                propertiesAssMap.put(p.getName(), p.getVal());
+            }
+            List<Node> nodes = this.getNodesByLabel(label);
+            for(Node node: nodes){
+                Map<String, Object> newP = node.asMap();
+                System.out.println(propertiesAssMap == newP);
+                for (String key: propertiesAssMap.keySet()) {
+                    System.out.println(newP.get(key) +"     "+ propertiesAssMap.get(key));
+                    if (newP.containsKey(key) && Objects.equals(newP.get(key).toString(), propertiesAssMap.get(key).toString()))
+                        return (int) node.id();
+                    else if (newP.containsKey(key) && !Objects.equals(newP.get(key).toString(), propertiesAssMap.get(key).toString()))
+                        return this.insertNode(label, properties);
+                }
+            }
+            return this.insertNode(label, properties);
+        }
+        catch (Exception e){
+            return -1;
+        }
+    }
+
+    public boolean compareNodes(Node node1, Node node2){
+        Map<String, Object> properties1 = node1.asMap();
+        Map<String, Object> properties2 = node2.asMap();
+        return node1.labels().equals(node2.labels()) && properties1.equals(properties2);
+    }
+
+    public boolean mergeNodes(Node node1, Node node2){
+        try {
+            for (String key: node2.asMap().keySet()){
+                Property property = new Property(key, node2.asMap().get(key));
+                this.insertPropertyToNode(node1.id(),property);
+            }
+            return true;
+        }catch (Exception e){
+            return  false;
         }
     }
 

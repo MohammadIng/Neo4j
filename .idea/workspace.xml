@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f5feea1-288b-42c0-a422-cc2555313e9d" name="Changes" comment="Neo4jDBManager get display and delete constraints">
+    <list default="true" id="8f5feea1-288b-42c0-a422-cc2555313e9d" name="Changes" comment="updateRelationshipType">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Neo4jDBManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Neo4jDBManager.java" afterDir="false" />
@@ -30,10 +30,11 @@
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2eaULAUV16MQzbaPm9ltioASfsN" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -47,7 +48,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "jdk.selected.JAVA_MODULE": "openjdk-20 (2)",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "A:/OneDrive/Arbeit/Neo4j/libs/reactive-streams-1.0.4.jar",
+    "last_opened_file_path": "A:/OneDrive/Arbeit/Neo4jNwe",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -118,6 +119,7 @@
       <option name="presentableId" value="Default" />
       <updated>1712142205758</updated>
       <workItem from="1712142206850" duration="46770000" />
+      <workItem from="1715631475443" duration="2437000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -353,7 +355,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add Property To Node" />
     <MESSAGE value="delete Property From Node" />
     <MESSAGE value="update Property in Node" />
     <MESSAGE value="class Edge" />
@@ -378,6 +379,7 @@
     <MESSAGE value="Neo4jDBManager get value of property in node and relationship" />
     <MESSAGE value="Neo4jDBManager code review" />
     <MESSAGE value="Neo4jDBManager get display and delete constraints" />
-    <option name="LAST_COMMIT_MESSAGE" value="Neo4jDBManager get display and delete constraints" />
+    <MESSAGE value="updateRelationshipType" />
+    <option name="LAST_COMMIT_MESSAGE" value="updateRelationshipType" />
   </component>
 </project>

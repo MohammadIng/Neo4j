@@ -3,101 +3,57 @@ package org.example;
 
 import org.neo4j.driver.types.Node;
 
+import java.util.Properties;
+
 public class Main {
 
+    public  static Neo4jDBManager manager = new Neo4jDBManager();
 
-
+    public static void deleteAll(int l){
+        for (int i=0;i<l; i++){
+            manager.deleteNodeById(i);
+            manager.deleteRelationshipById(i);
+        }
+    }
 
     public static void main(String[] args) {
-//        Neo4jManager neo4jManager = new Neo4jManager();
-//        neo4jManager.displayAllNodes();
-//        neo4jManager.displayNodeById(4);
-//        neo4jManager.displayNodes(neo4jManager.getNodesByValue(30));
 
-//        Property[] properties = {
-//            new Property("x", "1"),
-//            new Property("y", 2)
-//        };
-//        neo4jManager.addNode("MyNode", properties);
+//        deleteAll(20);
 
-//        Node node = neo4jManager.getNodeById(3);
-//        neo4jManager.deleteNode(node);
-
-//        neo4jManager.displayNodeById(1);
-//        Property p = new Property("p12",12);
-//        neo4jManager.addPropertyToNode(1, p);
-//        neo4jManager.displayNodeById(1);
-
-//        Property p = new Property("p12",122);
-//        neo4jManager.addPropertyToNode(1, p);
-//        neo4jManager.displayNodeById(1);
-//        p = new Property("p12",1224);
-//        neo4jManager.updatePropertyInNode(1, p);
-//        neo4jManager.displayNodeById(1);
-//        neo4jManager.deletePropertyFromNode(1, p);
-//        neo4jManager.displayNodeById(1);
-
-
-
-//        Property[] properties = {
-//            new Property("x", "1"),
-//            new Property("y", 2)
-//        };
-//        Edge edge = new Edge(neo4jManager.getNodeById(2), neo4jManager.getNodeById(5),"Test", properties);
-//        neo4jManager.addEdge(edge);
-
-//        neo4jManager.deleteEdgeById(1);
-//        neo4jManager.displayAllNodes();
-//        neo4jManager.displayAllEdges();
-
-//        neo4jManager.displayEdge(neo4jManager.getEdgeById(2));
-
-//        neo4jManager.displayEdges(neo4jManager.getEdgesByStartAndEndNodeId(2,5));
-
-        Neo4jDBManager neo4jDBManager = new Neo4jDBManager();
-
-//        neo4jDBManager.createNode("MyNode", properties);
-//        neo4jDBManager.displayNodes(neo4jDBManager.getNodesByValue("1"));
-//        neo4jDBManager.displayNode(neo4jDBManager.getNodeById(1));
-//        neo4jDBManager.deleteNodeById(4);
-//        neo4jDBManager.updatePropertyInNode(2, "xx", "qw");
-//        neo4jDBManager.displayAllNodes();
-//        neo4jDBManager.displayAllNodes();
-//        neo4jDBManager.displayNodes(neo4jDBManager.getNodesByLabel("Person"));
-
-//        neo4jDBManager.createRelationship(2,2, "R1",properties);
-//        neo4jDBManager.deleteRelationshipById(0);
-//        neo4jDBManager.updatePropertyInRelationship(2, new Property("xxe","12w3ee"));
-//        neo4jDBManager.displayAllRelationships();
-
-
-//        neo4jDBManager.displayAllNodes();
-//        neo4jDBManager.displayAllRelationships();
-
-//        neo4jDBManager.displayAllNodes();
-////        neo4jDBManager.createRelationship(4,3,"1", properties);
-//        neo4jDBManager.deleteNodeById(0);
-//        neo4jDBManager.displayAllRelationships();
-//        for (int i=0; i<20; i++)
-//            neo4jDBManager.deleteNodeById(i);
-//        String[] labels = new String[]{"L1","L2"};
-//        neo4jDBManager.insertNodeWithMultiLabels(labels,properties);
-//        neo4jDBManager.insertLabelsToNode(10, labels);
-//        neo4jDBManager.displayAllConstraints();
-        Property[] properties = {
-//                new Property("name", "Judy"),
-//                new Property("age", 23),
+        Property []properties2 = new Property[]{
+                                                new Property("name","rostock"),
+                                                new Property("bl","mv")
+                                                };
+        Property []properties1 = new Property[]{
+                new Property("name","judy"),
+                new Property("age",29),
 
         };
-//        neo4jDBManager.insertConstraintNodeUnique("Person","name");
-//        neo4jDBManager.insertNode("Person", properties);
-        neo4jDBManager.insertRelationship(6,4,"kennt", properties );
-//        neo4jDBManager.deletePropertyFromNode(4, "age");
-        neo4jDBManager.displayAllNodes();
-        neo4jDBManager.displayAllRelationships();
-//        neo4jDBManager.insertConstraintNodeUnique("Node1", "x");
-//        neo4jDBManager.deleteConstraintById(4);
-//        neo4jDBManager.displayAllConstraints();
+
+        Property []propertiest = new Property[]{
+                new Property("in2",2014),
+        };
+
+
+
+
+
+//        manager.insertNode("person",properties1);
+//        manager.insertNode("stadt",properties2);
+
+//        manager.insertRelationship(0,1, "t1",propertiest);
+//
+//        manager.insertRelationship(0,1, "t1",propertiest);
+        manager.insertNodeWithOutDuplicate("person", properties1);
+//        manager.insertRelationshipWithoutDuplicate(4,5, "besucht",propertiest);
+
+//        manager.insertRelationshipWithoutDuplicate(0,1, "stduiret_in",propertiest);
+
+
+
+
+        manager.displayAllNodes();
+        manager.displayAllRelationships();
 
 
     }
