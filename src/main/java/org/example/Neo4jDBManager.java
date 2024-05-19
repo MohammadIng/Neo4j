@@ -1059,16 +1059,103 @@ public class Neo4jDBManager {
         return node1.labels().equals(node2.labels()) && properties1.equals(properties2);
     }
 
-    public boolean mergeNodes(Node node1, Node node2){
+    public boolean mergeNodes(int nodeId1, int nodeId2){
         try {
-            for (String key: node2.asMap().keySet()){
-                Property property = new Property(key, node2.asMap().get(key));
-                this.insertPropertyToNode(node1.id(),property);
+            Node node1 = this.getNodeById(nodeId1);
+            Node node2 = this.getNodeById(nodeId2);
+
+            if(!node1.labels().equals(node2.labels())) {
+                System.out.println("Labels of Nodes are not identical");
+                return false;
             }
+            List<Relationship> relationships = this.getRelationshipsByStartOrEndNodeId(nodeId2, nodeId2);
+
+            for (Relationship relationship : relationships) {
+                int startNodeId = (int)relationship.startNodeId();
+                int endNodeId = (int)relationship.endNodeId();
+                if ((startNodeId == nodeId2 && endNodeId == nodeId1) || (startNodeId == nodeId1 && endNodeId == nodeId2)) {
+                    continue;
+                }
+
+                if (startNodeId == nodeId2) {
+                    startNodeId = nodeId1;
+                } else if (endNodeId == nodeId2) {
+                    endNodeId = nodeId1;
+                }
+
+                Property[] properties = new Property[relationship.asMap().size()];
+                int index = 0;
+                for (String key : relationship.asMap().keySet()) {
+                    properties[index] = new Property(key, relationship.asMap().get(key));
+                    index++;
+                }
+
+                this.insertRelationship(startNodeId, endNodeId, relationship.type(), properties);
+            }
+            mergeNodes(node1,node2);
+            this.deleteNode(node2);
             return true;
-        }catch (Exception e){
-            return  false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
+
+
+    public boolean mergeNodes(Node node1, Node node2) {
+        Map<String, Object> properties1 = new HashMap<>(node1.asMap());
+        Map<String, Object> properties2 = new HashMap<>(node2.asMap());
+        properties1.putAll(properties2);
+
+        try {
+            for (Map.Entry<String, Object> entry : properties1.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                Property property = new Property(key, value);
+                this.insertPropertyToNode(node1.id(), property);
+            }
+            this.deleteNode(node2);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean mergeRelationships(int relId1, int relId2) {
+        try (Session session = driver.session()) {
+            Relationship rel1 = getRelationshipById(relId1);
+            Relationship rel2 = getRelationshipById(relId2);
+
+            // Check if both relationships have the same type
+            if (!rel1.type().equals(rel2.type()) ||
+                    rel1.startNodeId()!= rel2.startNodeId() ||
+                    rel1.endNodeId() != rel2.endNodeId()) {
+                System.out.println("Relationship types are not identical");
+                return false;
+            }
+
+            Map<String, Object> properties1 = new HashMap<>(rel1.asMap());
+            Map<String, Object> properties2 = new HashMap<>(rel2.asMap());
+            properties1.putAll(properties2);
+
+            for (Map.Entry<String, Object> entry : properties1.entrySet()) {
+                Property property = new Property(entry.getKey(), entry.getValue());
+                insertPropertyInRelationship(relId1, property);
+            }
+
+            // Delete rel2
+            deleteRelationshipById(relId2);
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
+
 
 }

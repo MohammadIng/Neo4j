@@ -30,9 +30,7 @@ public class Main {
 
         };
 
-        Property []propertiest = new Property[]{
-                new Property("in2",2014),
-        };
+
 
 
 
@@ -44,11 +42,25 @@ public class Main {
 //        manager.insertRelationship(0,1, "t1",propertiest);
 //
 //        manager.insertRelationship(0,1, "t1",propertiest);
-        manager.insertNodeWithOutDuplicate("person", properties1);
+//        manager.insertNodeWithOutDuplicate("person", properties1);
 //        manager.insertRelationshipWithoutDuplicate(4,5, "besucht",propertiest);
 
 //        manager.insertRelationshipWithoutDuplicate(0,1, "stduiret_in",propertiest);
 
+        Property []propertiesR = new Property[]{
+                new Property("seit",2000),
+                new Property("with","freind"),
+        };
+        Property []propertiesN = new Property[]{
+                new Property("x","y"),
+                new Property("c","d"),
+        };
+
+//            manager.deleteRelationshipById(4);
+//        int id = manager.insertNode("person", propertiesN);
+//        manager.insertRelationship(17, 2,"arbeitet", propertiesR);
+
+        manager.mergeRelationships(4,2);
 
 
 
