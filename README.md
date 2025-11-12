@@ -9,7 +9,6 @@ The project enables developers to build, query, and visualize graph structures e
 ---
 
 ## ⚙️ Technology Stack
-|--------------------|-------------------------------------------------|
 | Component          | Description                                     |
 |--------------------|-------------------------------------------------|
 | **Language**       | Java 17+                                        |
@@ -17,7 +16,6 @@ The project enables developers to build, query, and visualize graph structures e
 | **Driver**         | Official Neo4j Java Driver (`org.neo4j.driver`) |
 | **Query Language** | Cypher                                          |
 | **Execution**      | Command-line Java application                   |
-|--------------------|-------------------------------------------------|
 
 ---
 
