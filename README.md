@@ -1,34 +1,142 @@
-Die Auswirkungen von INSERT, DELETE und UPDATE auf Knoten, Labels, Beziehungstypen, Eigenschaften und Werte von Eigenschaften in Neo4j können je nach den Aktionen und der Datenbankstruktur variieren. Hier sind die typischen Auswirkungen dieser Operationen:
+# 🔗 Java Neo4j Graph Database Manager
 
-1. **INSERT (Einfügen):**
-    - Knoten: Das Einfügen eines neuen Knotens führt dazu, dass ein neuer Knoten in der Datenbank erstellt wird. Dieser Knoten kann bestimmte Labels und Eigenschaften haben.
-    - Labels: Das Hinzufügen eines Labels zu einem Knoten bewirkt, dass dieser Knoten zu einer spezifischen Kategorie gehört. Dies kann die Art und Weise beeinflussen, wie Abfragen auf diese Knoten ausgeführt werden.
-    - Beziehungstypen: Das Hinzufügen einer Beziehung zwischen zwei Knoten bewirkt, dass eine Verbindung zwischen ihnen in der Datenbank erstellt wird. Der Beziehungstyp kann angeben, welche Art von Verbindung zwischen den Knoten besteht.
-    - Eigenschaften: Das Hinzufügen von Eigenschaften zu einem Knoten oder einer Beziehung ermöglicht es, zusätzliche Informationen über diese Entitäten zu speichern.
-    - Werte von Eigenschaften: Das Einfügen von Werten in die Eigenschaften von Knoten oder Beziehungen bedeutet, dass diese Werte in der Datenbank gespeichert werden.
+## 📘 Overview
+This project provides a **Java-based framework for managing and interacting with Neo4j graph databases**.  
+It demonstrates how to model graph entities (nodes, relationships, and properties), execute Cypher queries, and manage database connections through a structured object-oriented architecture.
 
-2. **DELETE (Löschen):**
-    - Knoten: Das Löschen eines Knotens entfernt diesen Knoten und alle damit verbundenen Beziehungen aus der Datenbank.
-    - Labels: Das Entfernen eines Labels von einem Knoten bewirkt, dass dieser Knoten nicht mehr zu dieser Kategorie gehört. Die Knoten selbst bleiben jedoch erhalten.
-    - Beziehungstypen: Das Löschen einer Beziehung entfernt die Verbindung zwischen den beteiligten Knoten aus der Datenbank.
-    - Eigenschaften: Das Löschen von Eigenschaften aus einem Knoten oder einer Beziehung entfernt diese Informationen aus der Datenbank.
-    - Werte von Eigenschaften: Das Löschen von Werten aus den Eigenschaften eines Knotens oder einer Beziehung entfernt diese Werte aus der Datenbank.
+The project enables developers to build, query, and visualize graph structures efficiently — combining Java’s robustness with the flexibility of the Neo4j graph model.
 
-3. **UPDATE (Aktualisieren):**
-    - Knoten: Das Aktualisieren eines Knotens kann das Ändern seiner Eigenschaften oder das Hinzufügen/Entfernen von Labels beinhalten.
-    - Labels: Das Aktualisieren eines Labels kann das Umbenennen des Labels oder das Hinzufügen/Entfernen von Labels von Knoten beinhalten.
-    - Beziehungstypen: Das Aktualisieren eines Beziehungstyps kann das Umbenennen des Beziehungstyps oder das Ändern der Eigenschaften der Beziehung beinhalten.
-    - Eigenschaften: Das Aktualisieren von Eigenschaften eines Knotens oder einer Beziehung ändert die gespeicherten Informationen in der Datenbank.
-    - Werte von Eigenschaften: Das Aktualisieren von Werten in den Eigenschaften eines Knotens oder einer Beziehung ändert die gespeicherten Informationen in der Datenbank.
+---
 
+## ⚙️ Technology Stack
+|--------------------|-------------------------------------------------|
+| Component          | Description                                     |
+|--------------------|-------------------------------------------------|
+| **Language**       | Java 17+                                        |
+| **Database**       | Neo4j (Community or Enterprise Edition)         |
+| **Driver**         | Official Neo4j Java Driver (`org.neo4j.driver`) |
+| **Query Language** | Cypher                                          |
+| **Execution**      | Command-line Java application                   |
+|--------------------|-------------------------------------------------|
 
-Wenn Knoten und Kanten mit gleichen Werten bereits in der Datenbank existieren, kann dies verschiedene Auswirkungen haben, abhängig von den spezifischen Anforderungen und der Konfiguration Ihrer Datenbank:
+---
 
-1. **Knoten mit gleichen Werten:**
-    - Wenn versuchr wird, einen neuen Knoten mit denselben Werten für Eigenschaften wie ein bereits vorhandener Knoten einzufügen, kann dies zu Duplikaten führen, sofern keine eindeutigen Constraints definiert sind.
-    - Eindeutige Constraints können definiert werden, um sicherzustellen, dass Knoten mit bestimmten Eigenschaftenwerten nicht mehrfach vorhanden sein können. In diesem Fall würde das Einfügen eines Duplikats zu einer Constraint-Verletzung führen und eine entsprechende Fehlermeldung zurückgeben.
+## 🧱 System Architecture
 
-2. **Kanten mit gleichen Werten:**
-    - Wenn Sie versuchen, eine Kante zwischen zwei Knoten mit denselben Werten für Eigenschaften wie eine bereits vorhandene Kante einzufügen, kann dies ebenfalls zu Duplikaten führen, sofern keine eindeutigen Constraints definiert sind.
-    - Eindeutige Constraints können auch auf Beziehungstypen und ihre Eigenschaften angewendet werden, um sicherzustellen, dass keine Duplikate vorhanden sind.
+```
++-------------------------------------------------------------------+
+|                   Java – Neo4j Graph System                       |
++-------------------------------------------------------------------+
+|  Main.java             → entry point of the application           |
+|  Neo4jManager.java     → handles Neo4j driver connection          |
+|  Neo4jDBManager.java   → manages transactions & queries           |
+|  Neo4jExample.java     → builds and demonstrates example graphs   |
+|  Edge.java             → represents relationships (edges)         |
+|  Property.java         → stores node properties (key-value pairs) |
++-------------------------------------------------------------------+
+```
 
+---
+
+## 🧩 Class Overview
+
+|-------------------------|---------------------------------------------------------------------------------------------|
+| Class                   | Description                                                                                 |
+|-------------------------|---------------------------------------------------------------------------------------------|
+| **Main.java**           | Entry point; initializes database connection and runs example operations.                   |
+| **Neo4jManager.java**   | Responsible for creating, maintaining, and closing Neo4j driver sessions.                   |
+| **Neo4jDBManager.java** | Provides methods for CRUD operations, Cypher execution, and transaction control.            |
+| **Neo4jExample.java**   | Contains predefined examples demonstrating how to create nodes, relationships, and queries. |
+| **Edge.java**           | Represents relationships between nodes, including type and direction.                       |
+| **Property.java**       | Defines key-value pairs for nodes or relationships (metadata).                              |
+|-------------------------|---------------------------------------------------------------------------------------------|
+
+---
+
+## 🧠 Workflow
+
+1. **Initialization** – `Neo4jManager` establishes a connection with the Neo4j database using the driver URI, username, and password.  
+2. **Graph Creation** – `Neo4jExample` creates nodes and relationships using Cypher queries.  
+3. **Data Manipulation** – `Neo4jDBManager` executes CRUD operations and commits transactions.  
+4. **Visualization / Debug** – results can be inspected directly in the Neo4j Browser or through returned query results.  
+5. **Termination** – sessions and driver connections are safely closed to release resources.  
+
+---
+
+## 🧰 Installation & Usage
+
+### 1️⃣ Prerequisites
+- Java JDK 17 or newer installed.  
+- Neo4j Desktop or Neo4j Server running locally.  
+- The official Neo4j Java Driver added to your project dependencies.
+
+Example Maven dependency:
+```xml
+<dependency>
+  <groupId>org.neo4j.driver</groupId>
+  <artifactId>neo4j-java-driver</artifactId>
+  <version>5.16.0</version>
+</dependency>
+```
+
+---
+
+### 2️⃣ Configure Database Connection
+In `Neo4jManager.java`, adjust the connection URI and credentials:
+```java
+private static final String URI = "bolt://localhost:7687";
+private static final String USER = "neo4j";
+private static final String PASSWORD = "your_password";
+```
+
+---
+
+### 3️⃣ Compile the Project
+```bash
+javac -cp "path/to/neo4j-java-driver.jar" *.java
+```
+
+---
+
+### 4️⃣ Run the Program
+```bash
+java -cp ".:path/to/neo4j-java-driver.jar" Main
+```
+
+---
+
+### 5️⃣ Example Output
+```
+Connected to Neo4j successfully.
+Creating nodes: Person {name: 'Alice'}, Person {name: 'Bob'}
+Creating relationship: (Alice)-[:KNOWS]->(Bob)
+Query result: MATCH (n) RETURN n
+Closing connection...
+```
+
+---
+
+## 🧪 Example Code Snippet
+
+```java
+try (Session session = driver.session()) {
+    session.run("CREATE (a:Person {name:'Alice'})");
+    session.run("CREATE (b:Person {name:'Bob'})");
+    session.run("MATCH (a:Person {name:'Alice'}), (b:Person {name:'Bob'}) " +
+                "CREATE (a)-[:KNOWS]->(b)");
+}
+```
+
+---
+
+## 📊 Use Cases
+- Educational demonstrations of Neo4j and graph modeling.  
+- Rapid prototyping of graph-based data structures.  
+- Testing of Cypher queries directly from Java.  
+- Integration of Neo4j into Java enterprise applications.
+
+---
+
+## 📚 Citation
+> Mohammad Matar, *Neo4j Graph Database Manager in Java*,  
+> University of Rostock, 2025.
