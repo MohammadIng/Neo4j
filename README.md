@@ -38,7 +38,6 @@ The project enables developers to build, query, and visualize graph structures e
 
 ## 🧩 Class Overview
 
-|-------------------------|---------------------------------------------------------------------------------------------|
 | Class                   | Description                                                                                 |
 |-------------------------|---------------------------------------------------------------------------------------------|
 | **Main.java**           | Entry point; initializes database connection and runs example operations.                   |
@@ -47,7 +46,6 @@ The project enables developers to build, query, and visualize graph structures e
 | **Neo4jExample.java**   | Contains predefined examples demonstrating how to create nodes, relationships, and queries. |
 | **Edge.java**           | Represents relationships between nodes, including type and direction.                       |
 | **Property.java**       | Defines key-value pairs for nodes or relationships (metadata).                              |
-|-------------------------|---------------------------------------------------------------------------------------------|
 
 ---
 
