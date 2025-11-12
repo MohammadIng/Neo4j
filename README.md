@@ -133,6 +133,3 @@ try (Session session = driver.session()) {
 
 ---
 
-## 📚 Citation
-> Mohammad Matar, *Neo4j Graph Database Manager in Java*,  
-> University of Rostock, 2025.
